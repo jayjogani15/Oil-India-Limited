@@ -1,3 +1,14 @@
+---
+title: Oil India Limited - SPIS
+emoji: 🛢️
+colorFrom: yellow
+colorTo: gray
+sdk: docker
+app_port: 7860
+pinned: false
+license: mit
+---
+
 # OIL India — SIF Precursor Intelligence System (SPIS)
 ### AI/NLP Engine for Detecting Serious Injury & Fatality Precursors in HSSE Reports
 
