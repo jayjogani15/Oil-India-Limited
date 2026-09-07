@@ -1,0 +1,105 @@
+{
+  "Energy Isolation": {
+    "keywords": [
+      "energized", "LOTO", "lockout", "tagout", "isolation", "de-energized",
+      "electrical panel", "live wire", "live cable", "live equipment",
+      "isolation certificate", "energy isolation", "electrical isolation",
+      "no LOTO", "isolation not verified", "bypass isolation",
+      "pressurized line", "pressure isolation", "valve isolation",
+      "MCC", "switchgear", "transformer", "electrical work",
+      "arc flash", "electric shock", "high voltage", "HV"
+    ],
+    "weight": 1.0
+  },
+  "Hot Work": {
+    "keywords": [
+      "hot work", "welding", "cutting", "grinding", "spark", "soldering",
+      "brazing", "torch", "open flame", "ignition source", "grinder",
+      "gas cutting", "plasma cutting", "flame", "burning", "fire work",
+      "hot work permit", "no hot work permit", "fire watch", "no fire watch",
+      "flammable atmosphere", "gas test before hot work"
+    ],
+    "weight": 1.0
+  },
+  "Confined Space": {
+    "keywords": [
+      "confined space", "enclosed space", "tank entry", "vessel entry",
+      "pit entry", "manhole", "sewer", "trench", "underground chamber",
+      "storage tank", "separator entry", "oxygen deficiency",
+      "atmospheric test", "no gas test", "standby person", "no attendant",
+      "rescue plan", "confined space entry permit", "mud pit", "sump",
+      "engulfment", "asphyxiation", "toxic atmosphere"
+    ],
+    "weight": 1.0
+  },
+  "Working at Height": {
+    "keywords": [
+      "height", "elevated", "scaffold", "scaffolding", "ladder", "roof",
+      "fall from height", "fall arrest", "harness", "lanyard", "safety net",
+      "anchor point", "elevated platform", "mast", "derrick", "tower",
+      "cherry picker", "man lift", "scissor lift", "working above",
+      "above ground level", "dropped object", "falling object",
+      "no fall protection", "edge protection", "guardrail missing"
+    ],
+    "weight": 1.0
+  },
+  "Line of Fire": {
+    "keywords": [
+      "line of fire", "struck by", "caught in", "pinch point",
+      "rotating equipment", "moving equipment", "swinging load",
+      "dropped load", "overhead load", "projectile", "pressure release",
+      "blowout", "jet of fluid", "pressure jet", "ejection",
+      "machinery guard missing", "unguarded rotating", "conveyor",
+      "in the path", "danger zone", "exclusion zone breach"
+    ],
+    "weight": 1.0
+  },
+  "Safe Mechanical Lifting": {
+    "keywords": [
+      "crane", "lifting", "lift", "rigging", "sling", "shackle",
+      "hook", "hoist", "winch", "load", "SWL exceeded", "overload",
+      "rigging failure", "sling failure", "crane inspection",
+      "lifting plan", "no lifting plan", "lift supervisor",
+      "load swing", "dropped load", "load path", "crane certification",
+      "lifting equipment inspection", "forklift", "overhead crane",
+      "mobile crane", "crawler crane", "tagline missing"
+    ],
+    "weight": 1.0
+  },
+  "Work Authorisation": {
+    "keywords": [
+      "permit to work", "PTW", "work permit", "no permit", "permit not issued",
+      "permit expired", "work without permit", "unauthorized work",
+      "permit system", "PTW violation", "permit not signed",
+      "job hazard analysis", "JSA", "toolbox talk not done",
+      "TBT not conducted", "work order", "task not authorized",
+      "cold work permit", "hot work permit", "confined space permit",
+      "electrical work permit", "excavation permit"
+    ],
+    "weight": 1.0
+  },
+  "Driving": {
+    "keywords": [
+      "driving", "vehicle", "driver", "road", "collision", "accident",
+      "seatbelt", "speeding", "overspeed", "fatigue driving",
+      "mobile phone driving", "drunk driving", "vehicle rollover",
+      "road incident", "traffic", "reverse without spotter",
+      "vehicle in work zone", "pedestrian struck by vehicle",
+      "forklift incident", "heavy vehicle", "truck incident",
+      "journey management", "no journey plan", "defensive driving"
+    ],
+    "weight": 1.0
+  },
+  "Bypassing Safety Controls": {
+    "keywords": [
+      "bypass", "bypassed", "defeated", "overridden", "interlock bypass",
+      "safety interlock", "safety device removed", "guard removed",
+      "alarm disabled", "alarm bypassed", "safety system bypassed",
+      "relief valve removed", "pressure switch bypassed",
+      "trip system bypassed", "safety control defeated",
+      "short circuit safety", "safety protocol ignored",
+      "unauthorized modification", "non-compliant", "non-standard"
+    ],
+    "weight": 1.0
+  }
+}

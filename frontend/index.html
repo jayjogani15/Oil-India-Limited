@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HSSE Command Dashboard | Oil India Limited | Government of India</title>
+  <meta name="description"
+    content="AI/NLP-powered Serious Injury & Fatality (SIF) Precursor Detection Intelligence System for Oil India Limited, Ministry of Petroleum & Natural Gas, Government of India. Compliant with GIGW and OISD standards." />
+  <meta name="keywords"
+    content="Oil India Limited, Government of India, Ministry of Petroleum and Natural Gas, SIF Precursors, HSSE, IOGP Life-Saving Rules, OISD, DGMS, GIGW, NIC, AI Safety" />
+
+  <!-- Google Fonts: Noto Sans, Noto Sans Devanagari & Mukta -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Noto+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css?v=6" />
+</head>
+
+<body id="bodyRoot">
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     1. ACCESSIBILITY & UTILITY TOOLBAR (GIGW / NIC COMPLIANT)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="gov-top-bar" role="region" aria-label="Accessibility Toolbar">
+    <div class="top-bar-left">
+      <a href="#main-content" class="top-link" data-i18n="skipContent">Skip to Main Content</a>
+      <span class="top-sep">|</span>
+      <a href="javascript:void(0)" class="top-link" onclick="announceAccessibility()" data-i18n="screenReader">Screen Reader Access</a>
+      <span class="top-sep">|</span>
+      <a href="#siteMapSection" class="top-link" data-i18n="sitemap">Sitemap</a>
+    </div>
+    <div class="top-bar-right">
+      <div class="font-resizer" aria-label="Text Size Adjustment">
+        <button type="button" class="font-btn" onclick="changeFontSize(-1)" title="Decrease text size (A-)">A-</button>
+        <button type="button" class="font-btn" onclick="changeFontSize(0)" title="Standard text size (A)">A</button>
+        <button type="button" class="font-btn" onclick="changeFontSize(1)" title="Increase text size (A+)">A+</button>
+      </div>
+      <span class="top-sep">|</span>
+      <div class="lang-switch" aria-label="Language Selector">
+        <button type="button" class="lang-btn active" id="langBtnEn" onclick="setLanguage('en')">English</button>
+        <span class="top-sep">|</span>
+        <button type="button" class="lang-btn" id="langBtnHi" onclick="setLanguage('hi')">हिंदी</button>
+      </div>
+      <span class="top-sep">|</span>
+      <div class="role-selector" aria-label="Role-Based Access Control" style="display:inline-flex;align-items:center;gap:6px;">
+        <span style="font-size:0.75rem;color:rgba(255,255,255,0.85);font-weight:500;">Role:</span>
+        <select id="userRoleSelect" onchange="setUserRole(this.value)" style="background:#062035;color:#FFFFFF;border:1px solid #D8D4CB;padding:2px 6px;font-size:0.75rem;border-radius:2px;cursor:pointer;">
+          <option value="safety_officer" selected>Safety Officer (Triage)</option>
+          <option value="statutory_reviewer">Statutory Reviewer (Directorate)</option>
+          <option value="field_engineer">Field Engineer (Operational)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     2. NATIONAL TRICOLOUR STRIP (3PX)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="tricolor-strip" aria-hidden="true">
+    <div class="tri-saffron"></div>
+    <div class="tri-white"></div>
+    <div class="tri-green"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     3. GOVERNMENT OF INDIA & PSU CORPORATE HEADER (#0B3D6D)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <header class="gov-main-header" role="banner">
+    <div class="gov-header-inner">
+      <!-- Left: State Emblem & Hierarchy -->
+      <div class="gov-brand-left">
+        <!-- PSU Industrial Circular Seal (Compliance with State Emblem guidelines) -->
+        <div class="psu-seal" style="width:48px;height:48px;border-radius:50%;border:2px solid #C59B27;background:#0A1F33;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.15);flex-shrink:0;margin-right:12px;">
+          <div style="color:#FFFFFF;font-family:'Cinzel', Georgia, serif;font-weight:700;font-size:13px;letter-spacing:0.5px;line-height:1;">OIL</div>
+          <div style="color:#C59B27;font-size:8px;font-weight:700;letter-spacing:0.5px;margin-top:2px;">HSSE</div>
+        </div>
+
+        <div class="gov-titles">
+          <div class="gov-line-1">
+            <span class="hi">भारत सरकार</span>
+            <span class="top-sep">|</span>
+            <span class="en">Government of India</span>
+          </div>
+          <div class="gov-line-2">
+            <span class="hi">पेट्रोलियम एवं प्राकृतिक गैस मंत्रालय</span>
+            <span class="pipe">|</span>
+            <span class="en">Ministry of Petroleum &amp; Natural Gas</span>
+          </div>
+          <div class="gov-line-3">
+            <span class="hi">ऑयल इंडिया लिमिटेड</span>
+            <span class="dash">—</span>
+            <span class="en">Oil India Limited</span>
+          </div>
+          <div class="system-tag-row">
+            <span class="system-title-tag">HSSE - SIF PRECURSOR DETECTION &amp; ANALYTICS SYSTEM</span>
+            <span class="nlp-badge">AI / NLP POWERED</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: PSU / Navratna Enterprise Badge -->
+      <div class="gov-brand-right">
+        <div class="oil-enterprise-text">
+          <span class="oil-enterprise-main">Oil India Limited</span>
+          <span class="oil-enterprise-sub">A Government of India Enterprise · Navratna</span>
+        </div>
+        <div class="oil-logo-circle" title="Oil India Limited (OIL)">
+          <span class="oil-txt">OIL</span>
+          <span class="oil-sub">HSSE</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     4. NOTICES & ALERTS TICKER BAR (MAROON / DARK RED #8B0000)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="notice-ticker-bar" role="complementary" aria-label="Official Safety Notices">
+    <div class="ticker-label-wrap">
+      <span class="ticker-label">NOTICES</span>
+    </div>
+    <div class="ticker-content">
+      <div class="ticker-marquee" id="noticeMarquee">
+        <span>Violations up 12% in Q3 2025 — Duliajan Electrical Dept. prioritized for audit</span>
+        <span class="ticker-sep">|</span>
+        <span>System updated with 3,000 classified HSSE reports for FY 2025-26 training cycle</span>
+        <span class="ticker-sep">|</span>
+        <span><strong class="ticker-hl-critical">🔴 HIGH-RISK:</strong> Bypassing Safety Controls detected in Rajasthan Field Operations</span>
+        <span class="ticker-sep">|</span>
+        <span>Mandatory OISD-GDN-166 SIF precursor triage active across all extraction blocks</span>
+        <span class="ticker-sep">|</span>
+        <span>DGMS statutory safety compliance verified for Assam and Rajasthan operations</span>
+        <span class="ticker-sep">|</span>
+        <span>Continuous AI surveillance operational · Zero Harm mandate enforced</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     5. PRIMARY GOVERNMENT NAVIGATION BAR (NAVY BLUE #0B3D6D)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <nav class="gov-main-nav" aria-label="Primary Navigation">
+    <div class="gov-nav-container">
+      <div class="nav-tabs" role="tablist">
+        <button class="nav-tab-btn active" role="tab" aria-selected="true" data-section="dashboard" onclick="showSection('dashboard')">
+          <span class="nav-tab-icon">🏠</span>
+          <span data-i18n="navDashboard">Home / Dashboard</span>
+        </button>
+        <button class="nav-tab-btn" role="tab" aria-selected="false" data-section="analyzer" onclick="showSection('analyzer')">
+          <span class="nav-tab-icon">🔬</span>
+          <span data-i18n="navAnalyzer">Report Analyzer</span>
+        </button>
+        <button class="nav-tab-btn" role="tab" aria-selected="false" data-section="heatmap" onclick="showSection('heatmap')">
+          <span class="nav-tab-icon">🗺️</span>
+          <span data-i18n="navHeatmap">Risk Heatmap</span>
+        </button>
+        <button class="nav-tab-btn" role="tab" aria-selected="false" data-section="lsr" onclick="showSection('lsr')">
+          <span class="nav-tab-icon">🛡️</span>
+          <span data-i18n="navLSR">Life-Saving Rules</span>
+        </button>
+        <button class="nav-tab-btn" role="tab" aria-selected="false" data-section="clusters" onclick="showSection('clusters')">
+          <span class="nav-tab-icon">🧩</span>
+          <span data-i18n="navClusters">Pattern Clusters</span>
+        </button>
+        <button class="nav-tab-btn" role="tab" aria-selected="false" data-section="reports" onclick="showSection('reports')">
+          <span class="nav-tab-icon">📋</span>
+          <span data-i18n="navReports">Report Repository</span>
+        </button>
+        <button class="nav-tab-btn" role="tab" aria-selected="false" data-section="governance" onclick="showSection('governance')">
+          <span class="nav-tab-icon">⚖️</span>
+          <span data-i18n="navGovernance">Statutory Audit & Policy</span>
+        </button>
+      </div>
+      <div class="nav-actions">
+        <button class="nav-btn-export" onclick="openMinistryDossierModal()" title="Export Official Ministry Dossier">
+          <span>⬇</span> Export Data
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     6. BREADCRUMBS & REAL-TIME CLOCK SUB-BAR
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="sub-header-bar" aria-label="Breadcrumbs and Real-time Clock">
+    <div class="sub-header-inner">
+      <div class="breadcrumb-trail" id="breadcrumbTrail">
+        <span class="bc-item" onclick="showSection('dashboard')">Home</span>
+        <span class="bc-sep">&gt;</span>
+        <span class="bc-item" onclick="showSection('dashboard')">HSSE Analytics</span>
+        <span class="bc-sep">&gt;</span>
+        <span class="bc-current" id="bcActive">Command Dashboard</span>
+      </div>
+      <div class="live-clock-wrap">
+        <span class="clock-icon">🕒</span>
+        <span id="govDateTime" class="clock-val">Sat, 05 Sept 2026 01:15:16 am</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     7. MAIN CONTENT WRAPPER
+  ═══════════════════════════════════════════════════════════════════ -->
+  <main class="main-content" id="main-content" role="main">
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+       SECTION 1: COMMAND DASHBOARD (DEFAULT)
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section id="section-dashboard" class="content-section active">
+      <!-- Hero Title Row -->
+      <div class="dashboard-hero-row">
+        <div class="hero-left">
+          <h1 class="hero-title" data-i18n="dashTitle">HSSE Command Dashboard</h1>
+          <p class="hero-subtitle" data-i18n="dashSub">SIF Precursor Surveillance · Assam &amp; Rajasthan Field Operations · Real-time AI Analysis</p>
+        </div>
+        <div class="hero-right">
+          <div class="live-status-pill">
+            <span class="live-dot-pulse"></span>
+            <span>Live Analysis Active</span>
+          </div>
+          <button class="btn-download-report" onclick="openMinistryDossierModal()">
+            <span>📥</span> Download Report
+          </button>
+        </div>
+      </div>
+
+      <!-- Statutory Safety Compliance Card -->
+      <div class="statutory-banner">
+        <div class="statutory-body">
+          <div class="statutory-icon">🛡️</div>
+          <div>
+            <div class="statutory-title">Statutory Safety Compliance — OISD-GDN-166 &amp; DGMS Guidelines</div>
+            <p class="statutory-desc">
+              Automated precursor triage enforced for Unsafe Acts (UA), Unsafe Conditions (UC), and Near Misses within 60 minutes of filing.
+              Precursor signals with risk scores ≥ 80 trigger high-priority root-cause corrective interventions.
+            </p>
+          </div>
+        </div>
+        <div class="statutory-badge">OISD COMPLIANT</div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════════════
+         THE 5 STAT / KPI CARDS (CLEAN BORDERED, MINIMAL SHADOW)
+      ═══════════════════════════════════════════════════════════════════ -->
+      <div class="kpi-gov-grid">
+        <!-- Card 1: Total Reports Ingested -->
+        <div class="kpi-gov-card card-total">
+          <div class="kpi-icon-box">📁</div>
+          <div class="kpi-content">
+            <div class="kpi-primary-val" id="kpiTotal">3,000</div>
+            <div class="kpi-label-text">TOTAL REPORTS INGESTED</div>
+            <div class="kpi-sub-text">Active Operational Surveillance</div>
+          </div>
+        </div>
+
+        <!-- Card 2: SIF-Potential Flagged -->
+        <div class="kpi-gov-card card-sif">
+          <div class="kpi-icon-box">⚠️</div>
+          <div class="kpi-content">
+            <div class="kpi-primary-val" id="kpiSIF">900</div>
+            <div class="kpi-label-text">SIF-POTENTIAL FLAGGED</div>
+            <div class="kpi-sub-text" id="kpiSIFPct">30.0% of total</div>
+          </div>
+        </div>
+
+        <!-- Card 3: Critical Score >= 90 -->
+        <div class="kpi-gov-card card-critical">
+          <div class="kpi-icon-box" style="color:var(--status-critical)">🔴</div>
+          <div class="kpi-content">
+            <div class="kpi-primary-val" id="kpiCritical">270</div>
+            <div class="kpi-label-text">CRITICAL SCORE ≥ 90</div>
+            <div class="kpi-sub-text">Immediate action required</div>
+          </div>
+        </div>
+
+        <!-- Card 4: Most Violated Rule -->
+        <div class="kpi-gov-card card-rule">
+          <div class="kpi-icon-box">⚡</div>
+          <div class="kpi-content">
+            <div class="kpi-primary-text" id="kpiTopRule">Energy Isolation</div>
+            <div class="kpi-label-text">MOST VIOLATED RULE</div>
+            <div class="kpi-sub-text" id="kpiTopRuleCount">8 violations this period</div>
+          </div>
+        </div>
+
+        <!-- Card 5: Highest Risk Site -->
+        <div class="kpi-gov-card card-site">
+          <div class="kpi-icon-box" style="color:var(--gov-maroon)">📍</div>
+          <div class="kpi-content">
+            <div class="kpi-primary-text" id="kpiTopSite">Rajasthan</div>
+            <div class="kpi-label-text">HIGHEST RISK SITE</div>
+            <div class="kpi-sub-text" id="kpiTopSiteDensity">Density: 60.0%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row 1: Weekly Trend + Split Donut -->
+      <div class="charts-grid-row">
+        <div class="gov-chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title-text">Weekly SIF-Precursor Surveillance Trend</div>
+              <div class="chart-subtitle-text">Continuous NLP surveillance across reporting cycle</div>
+            </div>
+            <span class="chart-badge">Asset Surveillance</span>
+          </div>
+          <canvas id="trendChart" height="110"></canvas>
+        </div>
+
+        <div class="gov-chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title-text">SIF Classification Split</div>
+              <div class="chart-subtitle-text">Triage ratio across ingested reports</div>
+            </div>
+          </div>
+          <canvas id="splitChart" height="190"></canvas>
+          <div class="donut-legend-wrap">
+            <div><span class="legend-swatch swatch-sif"></span>SIF-Potential: <strong>25</strong></div>
+            <div><span class="legend-swatch swatch-safe"></span>Non-SIF Safe: <strong>25</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row 2: Density by Asset + Discipline Split -->
+      <div class="charts-grid-half">
+        <div class="gov-chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title-text">SIF Precursor Density by Operational Asset</div>
+              <div class="chart-subtitle-text">Ranked by percentage of reports with severe precursor signals</div>
+            </div>
+            <span class="chart-badge">Asset Ranking</span>
+          </div>
+          <canvas id="siteChart" height="160"></canvas>
+        </div>
+
+        <div class="gov-chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title-text">Reports by Technical Discipline</div>
+              <div class="chart-subtitle-text">Operations, Drilling, Electrical, Civil, Maintenance</div>
+            </div>
+            <span class="chart-badge">Discipline Breakdown</span>
+          </div>
+          <canvas id="deptChart" height="160"></canvas>
+        </div>
+      </div>
+
+      <!-- Priority SIF Alerts (Action Pending) -->
+      <div class="alerts-card">
+        <div class="alerts-header-row">
+          <div class="alerts-title-group">
+            <span style="font-size:16px">🚨</span>
+            <div class="alerts-title-text">Priority SIF Alerts (Mandated Action Pending)</div>
+          </div>
+          <button class="btn-view-all" onclick="showSection('reports')">View All Reports →</button>
+        </div>
+
+        <!-- Origin Filter Tabs: All, New Live Reports, Historical Archive -->
+        <div class="alert-filter-bar">
+          <button class="alert-filter-pill active" id="filterPillAll" onclick="setAlertFilter('all')">
+            <span>All Alerts</span>
+            <span class="alert-filter-count" id="countAlertsAll">5</span>
+          </button>
+          <button class="alert-filter-pill" id="filterPillNew" onclick="setAlertFilter('new')">
+            <span>🆕 New Reports</span>
+            <span class="alert-filter-count" id="countAlertsNew">0</span>
+          </button>
+          <button class="alert-filter-pill" id="filterPillOld" onclick="setAlertFilter('historical')">
+            <span>📜 Historical Archive</span>
+            <span class="alert-filter-count" id="countAlertsOld">5</span>
+          </button>
+        </div>
+
+        <div class="alerts-items-container" id="alertsList"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+       SECTION 2: REPORT ANALYZER
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section id="section-analyzer" class="content-section">
+      <div class="section-header-bar">
+        <div>
+          <h2 class="section-h2-title">AI HSSE Report Triage &amp; Explainability Engine</h2>
+          <p class="section-h2-sub">Submit observation narratives for instant SIF classification, precursor factor extraction &amp; audit explanation</p>
+        </div>
+      </div>
+
+      <div class="analyzer-layout">
+        <!-- Input Form -->
+        <div class="form-panel-card">
+          <div class="form-card-title">📝 HSSE Report Submission</div>
+          <div class="form-card-sub">OIL Internal Safety Observation Ingestion Interface</div>
+
+          <div class="form-group-item">
+            <label class="form-label-title" for="reportText">Report Narrative Text *</label>
+            <textarea id="reportText" class="form-textarea-control" rows="6"
+              placeholder="Describe the incident or unsafe condition... (e.g. 'Contractor was working on an energized MCC panel at Duliajan field without verifying isolation. No LOTO tag observed...')"></textarea>
+          </div>
+
+          <div class="form-row-2col">
+            <div class="form-group-item">
+              <label class="form-label-title" for="reportSite">Operational Asset</label>
+              <select id="reportSite" class="form-select-control">
+                <option value="">Select site...</option>
+                <option>Duliajan</option>
+                <option>Moran</option>
+                <option>Jorhat</option>
+                <option>Digboi</option>
+                <option>Naharkatia</option>
+                <option>Baghjan</option>
+                <option>Sibsagar</option>
+                <option>Geleki</option>
+                <option>Rajasthan</option>
+              </select>
+            </div>
+            <div class="form-group-item">
+              <label class="form-label-title" for="reportType">Report Classification</label>
+              <select id="reportType" class="form-select-control">
+                <option value="">Select type...</option>
+                <option>Unsafe Act</option>
+                <option>Unsafe Condition</option>
+                <option>Near Miss</option>
+                <option>Incident</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2col">
+            <div class="form-group-item">
+              <label class="form-label-title" for="reportDept">Department</label>
+              <input id="reportDept" class="form-input-control" type="text" placeholder="e.g. Electrical, Drilling, Operations..." />
+            </div>
+            <div class="form-group-item">
+              <label class="form-label-title" for="reportActivity">Activity Underway</label>
+              <input id="reportActivity" class="form-input-control" type="text" placeholder="e.g. Electrical Maintenance, Tank Inspection..." />
+            </div>
+          </div>
+
+          <!-- Quick Benchmarks -->
+          <div class="example-chips-wrap">
+            <div class="example-chips-label">⚡ Quick-Load Calibration Benchmarks:</div>
+            <div class="example-btn-list">
+              <button type="button" class="btn-chip" onclick="loadExample(0)">⚡ Energized MCC (No LOTO)</button>
+              <button type="button" class="btn-chip" onclick="loadExample(1)">🔥 Hot Work On Crude Line</button>
+              <button type="button" class="btn-chip" onclick="loadExample(2)">🕳️ Crude Tank (No Gas Test)</button>
+              <button type="button" class="btn-chip" onclick="loadExample(3)">🏗️ Crane SWL Overload</button>
+              <button type="button" class="btn-chip" onclick="loadExample(4)">🧹 Low-Risk Spilled Oil</button>
+            </div>
+          </div>
+
+          <button type="button" class="btn-run-triage" id="analyzeBtn" onclick="analyzeReport()">
+            <span id="analyzeBtnText">🔬 Execute AI Triage</span>
+          </button>
+        </div>
+
+        <!-- Results Output -->
+        <div class="results-panel-box" id="resultsPanel">
+          <div class="results-placeholder-box" id="resultsPlaceholder">
+            <div style="font-size:28px;margin-bottom:6px;color:var(--gov-navy)">🔬</div>
+            <div style="font-size:14px;font-weight:700;color:var(--gov-text-dark)">Triage Assessment Awaited</div>
+            <div style="font-size:12px;color:var(--gov-text-muted);margin-top:4px;max-width:380px;margin-left:auto;margin-right:auto">
+              Submit an observation narrative or select a benchmark above to execute the NLP triage engine and inspect SIF potential, IOGP rules, and critical barriers.
+            </div>
+          </div>
+
+          <div class="results-content-box" id="resultsContent" style="display:none">
+            <!-- Score & Gauge -->
+            <div class="result-detail-card" id="scoreCard">
+              <div class="result-card-heading">🎯 SIF Potential Risk Score (0–100)</div>
+              <div class="gauge-container">
+                <div class="gauge-svg-wrap">
+                  <svg viewBox="0 0 120 70" class="gauge-svg" id="gaugeSvg">
+                    <path d="M10,65 A55,55 0 0,1 110,65" stroke="#E5E7EB" stroke-width="12" fill="none" />
+                    <path id="gaugeArc" d="M10,65 A55,55 0 0,1 110,65" stroke="#8B0000" stroke-width="12" fill="none"
+                      stroke-dasharray="0 173" stroke-linecap="round" />
+                    <text x="60" y="58" text-anchor="middle" font-size="22" font-weight="900" fill="#0B3D6D" id="gaugeNum">0</text>
+                  </svg>
+                </div>
+                <div class="gauge-verdict-wrap">
+                  <div class="verdict-pill-tag" id="verdictPill">—</div>
+                  <div class="verdict-conf-text" id="verdictConf"></div>
+                  <div class="verdict-stamp-text" id="verdictStamp">OIL HSSE VERIFIED · OISD-166</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- IOGP Rules Triggered -->
+            <div class="result-detail-card">
+              <div class="result-card-heading">🛡️ IOGP Life-Saving Rules Triggered</div>
+              <div class="lsr-pills-row" id="lsrTagsWrap"></div>
+            </div>
+
+            <!-- Precursor Signal Highlighting -->
+            <div class="result-detail-card">
+              <div class="result-card-heading">🔦 Precursor Signal Highlighting</div>
+              <div class="highlighted-text-content" id="highlightedText"></div>
+            </div>
+
+            <!-- Barrier Failures -->
+            <div class="result-detail-card" id="barrierCard">
+              <div class="result-card-heading">🚧 Critical Barrier Failure Analysis</div>
+              <ul class="barrier-check-list" id="barrierList"></ul>
+            </div>
+
+            <!-- AI Explanation -->
+            <div class="result-detail-card">
+              <div class="result-card-heading">📝 AI Audit Explanation</div>
+              <div class="explanation-body" id="explanationText"></div>
+            </div>
+
+            <!-- Ingest New Report Action Card -->
+            <div class="ingest-action-card" id="ingestActionCard">
+              <div class="ingest-action-info">
+                <div class="ingest-action-title">📥 Ingest into Active Surveillance Feed</div>
+                <div class="ingest-action-desc">Commit this newly triaged incident narrative into the active surveillance repository and Priority SIF Alerts feed under OISD compliance.</div>
+              </div>
+              <button type="button" class="btn-commit-report" id="commitReportBtn" onclick="commitCurrentReport()">
+                <span>➕ Log as New Report to Feed</span>
+              </button>
+            </div>
+
+            <!-- Structured JSON -->
+            <div class="result-detail-card">
+              <div class="result-card-heading">⚙️ Structured API Payload (OISD / DGMS)</div>
+              <pre class="json-pre-box" id="jsonOutput"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+       SECTION 3: SIF HEATMAP
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section id="section-heatmap" class="content-section">
+      <div class="section-header-bar">
+        <div>
+          <h2 class="section-h2-title">SIF Precursor Density Heatmap &amp; Risk Ranking</h2>
+          <p class="section-h2-sub">Operational assets ranked by SIF-precursor concentration — prioritize safety audits and resource allocations</p>
+        </div>
+        <div>
+          <select class="filter-dropdown-select" id="heatmapGroup" onchange="renderHeatmap()">
+            <option value="site">Group by Operational Site</option>
+            <option value="department">Group by Department</option>
+            <option value="activity">Group by Activity</option>
+            <option value="report_type">Group by Report Type</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="heatmap-tiles-grid" id="heatmapGrid"></div>
+
+      <div class="gov-table-wrap">
+        <table class="gov-data-table" id="heatmapTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Location / Group</th>
+              <th>Total Reports</th>
+              <th>SIF-Potential</th>
+              <th>SIF Density</th>
+              <th>Avg SIF Score</th>
+              <th>Risk Category</th>
+              <th>Mandated Statutory Action</th>
+            </tr>
+          </thead>
+          <tbody id="heatmapTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+       SECTION 4: LIFE-SAVING RULES
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section id="section-lsr" class="content-section">
+      <div class="section-header-bar">
+        <div>
+          <h2 class="section-h2-title">IOGP Life-Saving Rules Breakdown</h2>
+          <p class="section-h2-sub">International Association of Oil &amp; Gas Producers (IOGP) 9 Core Rules Breaches</p>
+        </div>
+      </div>
+
+      <div class="lsr-grid-cards" id="lsrOverviewGrid"></div>
+
+      <div class="charts-grid-row">
+        <div class="gov-chart-card">
+          <div class="chart-header">
+            <div class="chart-title-text">Violation Frequency per Life-Saving Rule</div>
+            <span class="chart-badge">IOGP Standard</span>
+          </div>
+          <canvas id="lsrBarChart" height="130"></canvas>
+        </div>
+        <div class="gov-chart-card">
+          <div class="chart-header">
+            <div class="chart-title-text">LSR Distribution Share</div>
+          </div>
+          <canvas id="lsrPieChart" height="210"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+       SECTION 5: PATTERN CLUSTERS
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section id="section-clusters" class="content-section">
+      <div class="section-header-bar">
+        <div>
+          <h2 class="section-h2-title">SIF Precursor Pattern &amp; Hazard Clusters</h2>
+          <p class="section-h2-sub">Systemic risk clusters discovered via semantic NLP matching across operational fields</p>
+        </div>
+      </div>
+      <div class="cluster-grid-cards" id="clusterGrid"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+       SECTION 6: REPORTS REPOSITORY
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section id="section-reports" class="content-section">
+      <div class="section-header-bar">
+        <div>
+          <h2 class="section-h2-title">HSSE Reports Repository</h2>
+          <p class="section-h2-sub">Comprehensive audit repository of all ingested safety reports with verified SIF triage results</p>
+        </div>
+        <div>
+          <button class="btn-primary" onclick="exportCSV()">⬇ Download CSV</button>
+        </div>
+      </div>
+
+      <!-- Filters Bar -->
+      <div class="filter-bar-row">
+        <input class="filter-input-search" id="filterSearch" type="text"
+          placeholder="🔍 Search report narratives, site or department..." oninput="filterReports()" />
+        <select class="filter-dropdown-select" id="filterOrigin" onchange="filterReports()">
+          <option value="">All Origins (New &amp; Historical)</option>
+          <option value="new">🆕 New Live Reports Only</option>
+          <option value="historical">📜 Historical Dataset Only</option>
+        </select>
+        <select class="filter-dropdown-select" id="filterSite" onchange="filterReports()">
+          <option value="">All Operational Sites</option>
+        </select>
+        <select class="filter-dropdown-select" id="filterType" onchange="filterReports()">
+          <option value="">All Types</option>
+          <option>Unsafe Act</option>
+          <option>Unsafe Condition</option>
+          <option>Near Miss</option>
+          <option>Incident</option>
+        </select>
+        <select class="filter-dropdown-select" id="filterSIF" onchange="filterReports()">
+          <option value="">All Triage Status</option>
+          <option value="true">SIF Precursors Only</option>
+          <option value="false">Non-SIF Safe Only</option>
+        </select>
+        <select class="filter-dropdown-select" id="filterScore" onchange="filterReports()">
+          <option value="">All SIF Scores</option>
+          <option value="high">Score ≥ 80 (Critical)</option>
+          <option value="med">Score 50–79 (Flagged)</option>
+          <option value="low">Score &lt; 50 (Low)</option>
+        </select>
+      </div>
+
+      <div class="gov-table-wrap">
+        <table class="gov-data-table reports-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Date</th>
+              <th>Site</th>
+              <th>Department</th>
+              <th>Type</th>
+              <th>SIF Score</th>
+              <th>Triage Status</th>
+              <th>Primary Rule</th>
+              <th>Narrative Summary</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="reportsTableBody"></tbody>
+        </table>
+      </div>
+      <div class="table-pagination-bar" id="tablePagination"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+       7. STATUTORY AUDIT, RBAC & MODEL GOVERNANCE SECTION
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section id="section-governance" class="content-section" aria-label="Statutory Audit and Governance">
+      <div class="dash-section-header">
+        <h2 class="dash-sec-title">Statutory Audit Trail, Access Control & Retraining Policy</h2>
+        <div class="dash-sec-subtitle">
+          Mandatory compliance records under OISD-GDN-166 &amp; DGMS regulations · Immutable triage decision history · Automated safety guardrails
+        </div>
+      </div>
+
+      <!-- Top Policy & Health Row -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:16px;margin-bottom:20px;">
+        <!-- Retraining Policy Card -->
+        <div class="gov-card">
+          <div class="gov-card-head" style="border-bottom:1px solid var(--gov-border);padding-bottom:8px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+            <h3 style="font-size:0.95rem;color:var(--gov-navy);font-weight:700;">🔄 Retraining &amp; Rollback Policy</h3>
+            <span class="badge-status-safe" style="font-size:0.75rem;padding:2px 6px;border-radius:2px;background:#DCFCE7;color:#166534;font-weight:600;">ACTIVE</span>
+          </div>
+          <div style="font-size:0.85rem;line-height:1.6;color:var(--gov-text-body);" id="retrainingPolicyContent">
+            <div><strong>Governance Standard:</strong> OISD-GDN-166 &amp; DGMS Technical Surveillance</div>
+            <div><strong>Model Version:</strong> <code style="background:#EAEBED;padding:1px 5px;border-radius:2px;">v1.2.0-baseline</code></div>
+            <div><strong>Calendar Trigger:</strong> Quarterly statutory review</div>
+            <div><strong>Volume Trigger:</strong> &ge; 500 validated field observations</div>
+            <div><strong>Safety Guardrail:</strong> Minimum SIF Recall = <strong>95.0%</strong> (Zero Tolerance)</div>
+            <div><strong>Rollback Guard:</strong> Automatic fallback to <code style="background:#EAEBED;padding:1px 5px;border-radius:2px;">sif_model_backup.joblib</code> if recall regresses</div>
+          </div>
+          <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn-secondary" style="font-size:0.8rem;padding:6px 12px;" onclick="triggerModelRetraining()">
+              ⚙️ Retrain on New Records
+            </button>
+            <button class="btn-secondary" style="font-size:0.8rem;padding:6px 12px;border-color:#7A1620;color:#7A1620;" onclick="triggerEmergencyRollback()">
+              ⏮️ Emergency Model Rollback
+            </button>
+          </div>
+        </div>
+
+        <!-- RBAC Permissions Matrix Card -->
+        <div class="gov-card">
+          <div class="gov-card-head" style="border-bottom:1px solid var(--gov-border);padding-bottom:8px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+            <h3 style="font-size:0.95rem;color:var(--gov-navy);font-weight:700;">🛡️ Role-Based Access Control (RBAC)</h3>
+            <span id="activeRoleBadge" style="font-size:0.75rem;padding:2px 6px;border-radius:2px;background:#DBEAFE;color:#1E40AF;font-weight:600;">Active: Safety Officer</span>
+          </div>
+          <table class="gov-data-table" style="font-size:0.8rem;">
+            <thead>
+              <tr>
+                <th>Capability / Action</th>
+                <th>Field Eng.</th>
+                <th>Safety Off.</th>
+                <th>Statutory Rev.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Submit Incident / Narrative</td>
+                <td><span style="color:#15803D;">✔ Yes</span></td>
+                <td><span style="color:#15803D;">✔ Yes</span></td>
+                <td><span style="color:#15803D;">✔ Yes</span></td>
+              </tr>
+              <tr>
+                <td>View Triage &amp; Heatmaps</td>
+                <td><span style="color:#15803D;">✔ Yes</span></td>
+                <td><span style="color:#15803D;">✔ Yes</span></td>
+                <td><span style="color:#15803D;">✔ Yes</span></td>
+              </tr>
+              <tr>
+                <td>Statutory Triage Sign-Off</td>
+                <td><span style="color:#7A1620;">✘ No</span></td>
+                <td><span style="color:#15803D;">✔ Yes</span></td>
+                <td><span style="color:#15803D;">✔ Yes</span></td>
+              </tr>
+              <tr>
+                <td>Override SIF Score / LSR Rule</td>
+                <td><span style="color:#7A1620;">✘ No</span></td>
+                <td><span style="color:#15803D;">✔ Yes</span></td>
+                <td><span style="color:#15803D;">✔ Yes</span></td>
+              </tr>
+              <tr>
+                <td>Emergency Model Rollback</td>
+                <td><span style="color:#7A1620;">✘ No</span></td>
+                <td><span style="color:#7A1620;">✘ No</span></td>
+                <td><span style="color:#15803D;">✔ Yes</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Immutable Audit Trail Table -->
+      <div class="gov-card">
+        <div class="gov-card-head" style="border-bottom:1px solid var(--gov-border);padding-bottom:8px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+          <div>
+            <h3 style="font-size:0.95rem;color:var(--gov-navy);font-weight:700;">📜 Immutable Statutory Triage Audit Trail</h3>
+            <div style="font-size:0.8rem;color:var(--gov-text-muted);">Cryptographically verifiable audit log of reviewer sign-offs and model score overrides under OISD-GDN-166</div>
+          </div>
+          <button class="btn-secondary" style="font-size:0.8rem;padding:4px 10px;" onclick="loadAuditTrail()">🔄 Refresh Audit Log</button>
+        </div>
+
+        <div class="gov-table-wrap">
+          <table class="gov-data-table">
+            <thead>
+              <tr>
+                <th>Audit ID</th>
+                <th>Timestamp</th>
+                <th>Report ID</th>
+                <th>Reviewer</th>
+                <th>Role</th>
+                <th>Action</th>
+                <th>Model Score</th>
+                <th>Final Score</th>
+                <th>Statutory Clause</th>
+                <th>Reviewer Compliance Notes</th>
+              </tr>
+            </thead>
+            <tbody id="auditTrailTableBody">
+              <tr>
+                <td colspan="10" style="text-align:center;color:var(--gov-text-muted);padding:16px;">Loading audit trail...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     8. REPORT DETAIL MODAL
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="reportModal" onclick="closeModal(event)">
+    <div class="modal-dialog-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head-bar">
+        <div class="modal-head-title" id="modalTitle">🏥 OIL India Limited — Incident Investigation Record</div>
+        <button class="modal-close-btn" onclick="closeReportModal()">✕</button>
+      </div>
+      <div class="modal-scroll-body" id="modalContent"></div>
+      <div class="modal-foot-bar">
+        <button class="btn-secondary" onclick="window.print()">🖨️ Print Record</button>
+        <button class="btn-primary" onclick="closeReportModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     9. MINISTRY DOSSIER MEMORANDUM MODAL
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="ministryModal" onclick="closeMinistryModal(event)">
+    <div class="modal-dialog-box dossier-dialog-box" role="dialog" aria-modal="true">
+      <div class="modal-head-bar">
+        <div class="modal-head-title">📄 Government of India — Statutory Safety Memorandum</div>
+        <button class="modal-close-btn" onclick="closeMinistryModal(null, true)">✕</button>
+      </div>
+
+      <div class="modal-scroll-body">
+        <div class="memo-header-band">
+          <div class="oil-logo-circle">
+            <span class="oil-txt">OIL</span>
+            <span class="oil-sub">HSSE</span>
+          </div>
+          <div class="memo-titles">
+            <div class="memo-co">OIL INDIA LIMITED (A Government of India Enterprise)</div>
+            <div class="memo-dept">Corporate Directorate of Health, Safety, Security &amp; Environment (HSSE)</div>
+            <div class="memo-doc-title">SIF Precursor Surveillance Dossier · OISD-GDN-166 &amp; DGMS Compliance</div>
+          </div>
+        </div>
+
+        <div class="memo-meta-grid">
+          <div><strong>Document Ref:</strong> OIL/HSSE/SIF-DOSSIER-2026/09</div>
+          <div><strong>Surveillance Date:</strong> 05 September 2026</div>
+          <div><strong>Security Classification:</strong> RESTRICTED // STATUTORY AUDIT</div>
+          <div><strong>Statutory Mandate:</strong> OISD-GDN-166 &amp; DGMS Circular No. 04</div>
+        </div>
+
+        <div style="margin-bottom:14px">
+          <h4 style="font-size:13px;color:var(--gov-navy);margin-bottom:4px">1. Executive Summary &amp; AI Triage Statistics</h4>
+          <p style="font-size:12px;color:var(--gov-text-body);line-height:1.5">
+            The automated AI/NLP SIF Precursor Detection Intelligence System has completed real-time analysis of operational safety reports across Assam and Rajasthan operational assets.
+          </p>
+          <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+            <div style="background:var(--gov-bg);padding:6px 10px;border-radius:2px;font-size:11.5px;font-weight:700">3,000 Total Reports</div>
+            <div style="background:#FEE2E2;color:var(--gov-maroon);padding:6px 10px;border-radius:2px;font-size:11.5px;font-weight:700">900 (30.0%) SIF Flagged</div>
+            <div style="background:#FEE2E2;color:var(--gov-maroon);padding:6px 10px;border-radius:2px;font-size:11.5px;font-weight:700">270 Critical (Score ≥ 90)</div>
+            <div style="background:#FEF3C7;color:#92400E;padding:6px 10px;border-radius:2px;font-size:11.5px;font-weight:700">Rajasthan (60.0%) Top Risk</div>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-size:13px;color:var(--gov-navy);margin-bottom:6px">2. Critical Precursor Violations Requiring Immediate Corrective Action</h4>
+          <table class="gov-data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Asset &amp; Dept</th>
+                <th>Score</th>
+                <th>Applicable Life-Saving Rule</th>
+                <th>Failed Safety Barriers (OISD Classified)</th>
+              </tr>
+            </thead>
+            <tbody id="dossierTableBody"></tbody>
+          </table>
+        </div>
+
+        <button class="btn-primary" onclick="window.print()">🖨️ Print Memorandum</button>
+        <button class="btn-secondary" onclick="closeMinistryModal(null, true)">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     10. OFFICIAL GIGW MANDATORY FOOTER (NIC & MINISTRY COMPLIANT)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <footer class="gov-main-footer" id="siteMapSection" role="contentinfo">
+    <!-- Mandatory GIGW Policies Band -->
+    <div class="footer-policies-band">
+      <div class="footer-policies-inner">
+        <a href="javascript:void(0)" class="footer-policy-link">Terms of Use</a>
+        <span class="top-sep">|</span>
+        <a href="javascript:void(0)" class="footer-policy-link">Privacy Policy</a>
+        <span class="top-sep">|</span>
+        <a href="javascript:void(0)" class="footer-policy-link">Hyperlinking Policy</a>
+        <span class="top-sep">|</span>
+        <a href="javascript:void(0)" class="footer-policy-link">Copyright Policy</a>
+        <span class="top-sep">|</span>
+        <a href="https://rtionline.gov.in" target="_blank" rel="noopener" class="footer-policy-link">Right to Information (RTI)</a>
+        <span class="top-sep">|</span>
+        <a href="javascript:void(0)" class="footer-policy-link">Accessibility Statement</a>
+        <span class="top-sep">|</span>
+        <a href="javascript:void(0)" class="footer-policy-link">Sitemap</a>
+        <span class="top-sep">|</span>
+        <a href="javascript:void(0)" class="footer-policy-link">Help &amp; Contact Us</a>
+      </div>
+    </div>
+
+    <!-- Middle Brand & Links Band -->
+    <div class="footer-top-band">
+      <div class="footer-top-inner">
+        <div class="footer-col-brand">
+          <div class="footer-co-title">ऑयल इंडिया लिमिटेड | Oil India Limited</div>
+          <div class="footer-co-desc">
+            A Navratna Enterprise under the Ministry of Petroleum &amp; Natural Gas, Government of India.
+            Committed to Zero Harm through automated SIF precursor detection and proactive barrier management across all upstream operational assets.
+          </div>
+        </div>
+        <div class="footer-links-group">
+          <div class="footer-links-col">
+            <h4>HSSE Navigation</h4>
+            <ul>
+              <li><a href="javascript:void(0)" onclick="showSection('dashboard')">Command Dashboard</a></li>
+              <li><a href="javascript:void(0)" onclick="showSection('analyzer')">Report Analyzer</a></li>
+              <li><a href="javascript:void(0)" onclick="showSection('heatmap')">Risk Heatmap</a></li>
+              <li><a href="javascript:void(0)" onclick="showSection('lsr')">Life-Saving Rules</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4>Government Portals</h4>
+            <ul>
+              <li><a href="https://mopng.gov.in" target="_blank" rel="noopener">Ministry of Petroleum &amp; Natural Gas</a></li>
+              <li><a href="https://oisd.gov.in" target="_blank" rel="noopener">Oil Industry Safety Directorate (OISD)</a></li>
+              <li><a href="https://dgms.gov.in" target="_blank" rel="noopener">Directorate General of Mines Safety (DGMS)</a></li>
+              <li><a href="https://india.gov.in" target="_blank" rel="noopener">National Portal of India</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Compliance, Credits & Governance Band (GIGW 3.0 / NIC Compliant) -->
+    <div class="footer-bottom-band">
+      <div class="footer-bottom-inner">
+        <div>
+          Content Owned &amp; Maintained by <strong>Corporate HSSE Directorate, Oil India Limited (Ministry of Petroleum &amp; Natural Gas, Government of India)</strong>.<br />
+          Platform Designed, Developed &amp; Hosted by <strong>National Informatics Centre (NIC)</strong>. Certified GIGW 3.0 / WCAG 2.1 AA Compliant.
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <div class="footer-status-tag" style="display:flex;align-items:center;gap:6px;font-size:0.8rem;color:#D1D5DB;">
+            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10B981;"></span>
+            <span>NIC Secure Gateway · SSL/TLS 1.3</span>
+          </div>
+          <div style="font-size:0.8rem;color:#9CA3AF;">Last Updated: <span id="footer-last-updated">05 September 2026</span></div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js?v=8"></script>
+</body>
+
+</html>

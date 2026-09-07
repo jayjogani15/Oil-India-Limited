@@ -1,0 +1,42 @@
+[
+  {
+    "audit_id": "AUD-2026-0002",
+    "timestamp": "2026-09-05T16:10:21.976087",
+    "report_id": "R001",
+    "report_text": "Contractor was working on an energized MCC panel at Duliajan field without verifying isolation. No LOTO tag observed. Worker's hand came within 10 cm of live busbar. Near miss \u2014 no injury.",
+    "model_version": "v1.2.0-baseline",
+    "model_sif_score": 87,
+    "final_sif_score": 95,
+    "model_sif_potential": true,
+    "final_sif_potential": true,
+    "model_lsr": "Energy Isolation",
+    "final_lsr": "Energy Isolation",
+    "reviewer_id": "OIL-SO-104",
+    "reviewer_name": "Er. A. K. Baruah",
+    "reviewer_role": "safety_officer",
+    "action": "OVERRIDDEN",
+    "reviewer_notes": "Audited on site: 33kV terminal exposed without LOTO. Score escalated from 92 to 95 due to high arch-flash hazard.",
+    "oisd_clause": "OISD-GDN-166 Sec 5.2",
+    "statutory_alert_triggered": true
+  },
+  {
+    "audit_id": "AUD-2026-0001",
+    "timestamp": "2026-09-04T10:15:30",
+    "report_id": "RPT-0001",
+    "report_text": "Technician working inside 33kV switchgear panel without verifying LOTO or testing with multi-meter.",
+    "model_version": "v1.2.0-baseline",
+    "model_sif_score": 92,
+    "final_sif_score": 92,
+    "model_sif_potential": true,
+    "final_sif_potential": true,
+    "model_lsr": "Energy Isolation",
+    "final_lsr": "Energy Isolation",
+    "reviewer_id": "OIL-DIR-782",
+    "reviewer_name": "Er. P. K. Sharma (Chief Safety Officer)",
+    "reviewer_role": "statutory_reviewer",
+    "action": "APPROVED",
+    "reviewer_notes": "Immediate Stop Work Authority enforced. Disciplinary and refresher LOTO drill initiated under OISD-GDN-166 Sec 5.2.",
+    "oisd_clause": "OISD-GDN-166 Sec 5.2",
+    "statutory_alert_triggered": true
+  }
+]

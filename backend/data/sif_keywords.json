@@ -1,0 +1,103 @@
+{
+  "energy_sources": {
+    "weight": 25,
+    "terms": [
+      "energized", "live wire", "live cable", "live equipment", "electrocution",
+      "electrical panel", "high voltage", "low voltage", "transformer", "switchgear",
+      "MCC panel", "live conductor", "electric shock", "arc flash", "power line",
+      "overhead line", "power cable", "HV line", "substation", "DG set running",
+      "pressurized", "pressure vessel", "high pressure", "pressure line", "blow out",
+      "gas blowout", "hydrostatic pressure", "steam", "hydraulic pressure",
+      "pneumatic pressure", "compressed air", "charged line", "pressurized system"
+    ]
+  },
+  "isolation_failure": {
+    "weight": 22,
+    "terms": [
+      "no LOTO", "without LOTO", "LOTO not applied", "LOTO missing", "no lockout",
+      "isolation not verified", "not isolated", "without isolation", "bypass isolation",
+      "no isolation certificate", "isolation not done", "no tag out", "tag missing",
+      "no permit to work", "without PTW", "PTW not taken", "no work permit",
+      "permit not issued", "no energy isolation", "equipment not de-energized",
+      "not de-energized", "no LOTO tag", "isolation removed", "isolation bypassed"
+    ]
+  },
+  "gravity_height": {
+    "weight": 20,
+    "terms": [
+      "working at height", "height work", "elevated work", "roof work", "scaffold",
+      "scaffolding", "ladder", "fall from height", "fell from", "dropped from",
+      "slip and fall", "fall arrest", "no harness", "harness not worn",
+      "no fall protection", "safety harness missing", "anchor point", "lanyard",
+      "derrick", "mast", "tower", "platform edge", "open hole", "floor opening",
+      "falling object", "dropped object", "overhead work", "work above ground level",
+      "above ground", "elevated platform", "cherry picker", "man lift", "scissor lift",
+      "unstable surface", "fragile roof", "roof access", "above 2 meters", "above 2m"
+    ]
+  },
+  "mechanical_motion": {
+    "weight": 18,
+    "terms": [
+      "rotating equipment", "rotating machinery", "moving parts", "caught in machinery",
+      "pinch point", "nip point", "caught between", "struck by", "moving equipment",
+      "pump running", "motor running", "compressor running", "machinery in motion",
+      "unguarded equipment", "guard removed", "guard missing", "machine guard",
+      "conveyor", "agitator", "drill bit", "drill string", "rotating drill",
+      "winch", "draw works", "crane operation", "crane swing", "load swinging",
+      "lift in progress", "rigging", "sling", "shackle failure", "crane failure",
+      "hook", "block and tackle", "SWL exceeded", "overload", "overloaded crane"
+    ]
+  },
+  "fire_explosion": {
+    "weight": 22,
+    "terms": [
+      "hot work", "welding", "cutting", "grinding", "spark", "ignition source",
+      "flammable", "combustible", "hydrocarbon", "gas leak", "oil leak",
+      "petroleum", "LPG", "H2S", "hydrogen sulfide", "explosive atmosphere",
+      "LEL exceeded", "LEL above", "gas concentration", "no gas test",
+      "gas test not done", "fire", "flame", "burning", "explosion risk",
+      "explosive", "flammable material nearby", "naked flame", "open flame",
+      "fuel", "diesel", "crude oil", "natural gas", "vapor", "vapour",
+      "flashback", "backfire", "hot work permit", "no hot work permit",
+      "flash fire", "fire extinguisher missing", "no fire watch"
+    ]
+  },
+  "entrapment_engulfment": {
+    "weight": 20,
+    "terms": [
+      "confined space", "enclosed space", "tank entry", "vessel entry", "pit",
+      "sump", "trench", "excavation", "underground", "manhole", "sewer",
+      "storage tank", "separator", "mud pit", "no gas test before entry",
+      "oxygen deficiency", "oxygen depleted", "asphyxiation", "engulfment",
+      "entrapment", "no attendant", "no standby person", "confined space entry",
+      "atmospheric test", "no atmospheric test", "no rescue plan",
+      "trip and fall into excavation", "collapse", "soil collapse", "cave-in",
+      "shoring missing", "unshored excavation"
+    ]
+  },
+  "motor_vehicle": {
+    "weight": 15,
+    "terms": [
+      "vehicle accident", "vehicle incident", "road accident", "collision",
+      "speeding", "over speed", "overspeeding", "driver", "driving",
+      "seatbelt not worn", "no seatbelt", "seatbelt missing", "drunk driving",
+      "distracted driving", "mobile phone while driving", "fatigue driving",
+      "road condition", "vehicle rollover", "reverse without spotter",
+      "vehicle movement in work area", "pedestrian struck", "forklift",
+      "heavy vehicle", "truck", "tanker", "vehicle in restricted zone",
+      "no traffic marshal", "no banksman", "vehicle near wellhead"
+    ]
+  },
+  "supervision_human_factors": {
+    "weight": 10,
+    "terms": [
+      "worked alone", "working alone", "no supervision", "supervisor absent",
+      "no spotter", "no standby", "inadequate supervision", "not trained",
+      "untrained worker", "contractor not briefed", "no toolbox talk",
+      "TBT not done", "JSA not reviewed", "hazard not identified",
+      "complacency", "shortcut", "bypassed safety control", "overridden",
+      "bypassed interlock", "defeated safety system", "safety device removed",
+      "alarm disabled", "alarm bypassed"
+    ]
+  }
+}

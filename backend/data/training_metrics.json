@@ -1,0 +1,158 @@
+{
+  "system": "OIL India HSSE SIF Precursor Detection Platform",
+  "governance_standard": "OISD-GDN-166 & DGMS Statutory Triage",
+  "model_version": "v2.0.0-dedup-honest",
+  "pipeline": "TF-IDF(1-2gram,12k)+LogReg(balanced,C=1.0)",
+  "training_source": {
+    "raw_rows": 3000,
+    "unique_templates": 333,
+    "dedup_factor": "9.0x"
+  },
+  "lsr_mapping": {
+    "Energy Isolation": "Energy Isolation",
+    "Line of Fire": "Line of Fire",
+    "Hot Work": "Hot Work",
+    "Fire/Explosion": "Hot Work",
+    "Confined Space": "Confined Space",
+    "Working at Height": "Working at Height",
+    "Driving": "Driving",
+    "Process Safety": "Energy Isolation",
+    "Lifting Operations": "Safe Mechanical Lifting",
+    "Chemical Safety": "Confined Space",
+    "Stored Pressure": "Energy Isolation",
+    "Emergency Response": "Unclassified",
+    "None": "None"
+  },
+  "sif_classifier": {
+    "split_strategy": "Dedup 75/25 stratified. 333 unique templates.",
+    "unique_templates_total": 333,
+    "train_templates": 249,
+    "test_templates": 84,
+    "class_distribution": {
+      "sif_templates": 188,
+      "non_sif_templates": 145,
+      "sif_ratio": 0.5646
+    },
+    "cross_validation_5fold_on_train": {
+      "recall_mean": 0.9931,
+      "recall_std": 0.0138,
+      "f1_mean": 0.9965,
+      "f1_std": 0.007,
+      "accuracy_mean": 0.996
+    },
+    "held_out_test_metrics": {
+      "accuracy": 1.0,
+      "sif_precision": 1.0,
+      "sif_recall": 1.0,
+      "sif_f1": 1.0,
+      "non_sif_precision": 1.0,
+      "non_sif_recall": 1.0,
+      "non_sif_f1": 1.0,
+      "roc_auc": 1.0,
+      "confusion_matrix": {
+        "true_negatives": 37,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "true_positives": 47
+      }
+    }
+  },
+  "lsr_classifier": {
+    "labeled_templates": 183,
+    "train": 137,
+    "test": 46,
+    "valid_classes": [
+      "Energy Isolation",
+      "Hot Work",
+      "Line of Fire",
+      "Confined Space",
+      "Working at Height",
+      "Driving",
+      "Safe Mechanical Lifting"
+    ],
+    "class_counts": {
+      "Energy Isolation": 59,
+      "Hot Work": 39,
+      "Line of Fire": 35,
+      "Confined Space": 20,
+      "Working at Height": 15,
+      "Driving": 10,
+      "Safe Mechanical Lifting": 5
+    },
+    "accuracy": 1.0,
+    "weighted_f1": 1.0,
+    "confusion_matrix": {
+      "Energy Isolation": {
+        "Energy Isolation": 15,
+        "Hot Work": 0,
+        "Line of Fire": 0,
+        "Confined Space": 0,
+        "Working at Height": 0,
+        "Driving": 0,
+        "Safe Mechanical Lifting": 0
+      },
+      "Hot Work": {
+        "Energy Isolation": 0,
+        "Hot Work": 10,
+        "Line of Fire": 0,
+        "Confined Space": 0,
+        "Working at Height": 0,
+        "Driving": 0,
+        "Safe Mechanical Lifting": 0
+      },
+      "Line of Fire": {
+        "Energy Isolation": 0,
+        "Hot Work": 0,
+        "Line of Fire": 9,
+        "Confined Space": 0,
+        "Working at Height": 0,
+        "Driving": 0,
+        "Safe Mechanical Lifting": 0
+      },
+      "Confined Space": {
+        "Energy Isolation": 0,
+        "Hot Work": 0,
+        "Line of Fire": 0,
+        "Confined Space": 5,
+        "Working at Height": 0,
+        "Driving": 0,
+        "Safe Mechanical Lifting": 0
+      },
+      "Working at Height": {
+        "Energy Isolation": 0,
+        "Hot Work": 0,
+        "Line of Fire": 0,
+        "Confined Space": 0,
+        "Working at Height": 4,
+        "Driving": 0,
+        "Safe Mechanical Lifting": 0
+      },
+      "Driving": {
+        "Energy Isolation": 0,
+        "Hot Work": 0,
+        "Line of Fire": 0,
+        "Confined Space": 0,
+        "Working at Height": 0,
+        "Driving": 2,
+        "Safe Mechanical Lifting": 0
+      },
+      "Safe Mechanical Lifting": {
+        "Energy Isolation": 0,
+        "Hot Work": 0,
+        "Line of Fire": 0,
+        "Confined Space": 0,
+        "Working at Height": 0,
+        "Driving": 0,
+        "Safe Mechanical Lifting": 1
+      }
+    }
+  },
+  "stress_test_accuracy": 0.875,
+  "stated_limitation": "SYNTHETIC TEMPLATE-BASED DATA. Near-100% accuracy reflects clean vocabulary separation between templates, not proven real-world field performance. Must validate on 500+ real OIL field reports. Expected real accuracy: 75-90%.",
+  "retraining_policy": {
+    "trigger_calendar": "Quarterly",
+    "trigger_volume": ">=500 new real records",
+    "min_sif_recall": 0.95,
+    "backup": "sif_model_backup.joblib"
+  }
+}

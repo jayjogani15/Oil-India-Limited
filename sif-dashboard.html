@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPIS — SIF Precursor Intelligence System | Oil India Limited</title>
+  
+  <!-- Typography: Source Serif 4 (Headings), Inter (Body), JetBrains Mono (Data/Scores) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════════════
+       COLOR TOKENS & DESIGN SYSTEM (Institutional PSU / Government Aesthetic)
+    ═══════════════════════════════════════════════════════════════════ */
+    :root {
+      --navy-950: #0a1f33;   /* darkest header background */
+      --navy-900: #0d2a45;   /* header background */
+      --navy-800: #123657;   /* nav bar */
+      --navy-700: #1b4a73;   /* nav hover/accents */
+      --paper:    #f2efe6;   /* page background, warm off-white */
+      --paper-card: #fbfaf6; /* card/panel background */
+      --ink:      #16232e;   /* primary text */
+      --ink-soft: #4a5a68;   /* secondary text */
+      --hairline: #cfc9b8;   /* borders, dividers — thin, not shadows */
+      --saffron:      #c96a1f; /* accent — header border, active nav underline, hover */
+      --saffron-deep: #9c4f14;
+      --green:  #2f6b4f;     /* positive/low-risk indicator */
+      --red:    #a3312a;     /* high-risk/SIF indicator */
+      --amber:  #b8842e;     /* medium-risk indicator */
+      
+      --font-serif: "Source Serif 4", Georgia, serif;
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3, h4, .serif-heading {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       1. GOVERNMENT STRIP (~30px tall, navy-950)
+    ═══════════════════════════════════════════════════════════════════ */
+    .gov-strip {
+      background-color: var(--navy-950);
+      color: #94a3b8;
+      font-size: 11px;
+      height: 32px;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .gov-strip-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Small horizontal tricolor bar (saffron/white/green) */
+    .tricolor-box {
+      width: 18px;
+      height: 12px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .tricolor-box span:nth-child(1) { flex: 1; background: #FF9933; }
+    .tricolor-box span:nth-child(2) { flex: 1; background: #FFFFFF; }
+    .tricolor-box span:nth-child(3) { flex: 1; background: #138808; }
+
+    .gov-strip-text {
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+
+    .gov-strip-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .gov-strip-right a {
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .gov-strip-right a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+    .gov-strip-sep {
+      color: #475569;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       2. MAIN HEADER (navy-900, 3px saffron bottom border)
+    ═══════════════════════════════════════════════════════════════════ */
+    .main-header {
+      background-color: var(--navy-900);
+      color: #ffffff;
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid var(--saffron);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Abstract Circular PSU Seal Icon (Avoiding official national emblem) */
+    .psu-seal {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--saffron);
+      background: var(--navy-950);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+      flex-shrink: 0;
+    }
+    .psu-seal-inner {
+      color: #ffffff;
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      line-height: 1;
+    }
+    .psu-seal-sub {
+      color: var(--saffron);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    .header-titles {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .header-dept-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      color: #94a3b8;
+      text-transform: uppercase;
+    }
+
+    .header-system-title {
+      font-family: var(--font-serif);
+      font-size: 21px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.2px;
+      line-height: 1.2;
+    }
+
+    .header-subtitle {
+      font-size: 12px;
+      color: #cbd5e1;
+      font-weight: 400;
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      text-align: right;
+    }
+
+    .header-period {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .restricted-badge {
+      display: inline-block;
+      border: 1px solid var(--saffron);
+      color: #fed7aa;
+      background: rgba(201, 106, 31, 0.12);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 2px 8px;
+      border-radius: 2px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       3. TAB NAVIGATION BAR (navy-800)
+    ═══════════════════════════════════════════════════════════════════ */
+    .tab-navbar {
+      background-color: var(--navy-800);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 4px;
+    }
+
+    .nav-tab-item {
+      background: none;
+      border: none;
+      color: #cbd5e1;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 10px 16px;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.15s, color 0.15s;
+      border-radius: 2px 2px 0 0;
+    }
+
+    .nav-tab-item:hover {
+      background-color: var(--navy-700);
+      color: #ffffff;
+    }
+
+    .nav-tab-item.active {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .nav-tab-item.active::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: var(--saffron);
+    }
+
+    .nav-live-status {
+      margin-left: auto;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #94a3b8;
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--green);
+      display: inline-block;
+    }
+    .status-dot.active {
+      box-shadow: 0 0 6px var(--green);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       MAIN CONTENT CONTAINER
+    ═══════════════════════════════════════════════════════════════════ */
+    .main-container {
+      max-width: 1360px;
+      margin: 18px auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Panel and Grid Conventions */
+    .panel-box {
+      background-color: var(--paper-card);
+      border: 1px solid var(--hairline);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 10px 16px;
+      background-color: #f7f5ed;
+      border-bottom: 1px solid var(--hairline);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-title {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-header-sub {
+      font-size: 11px;
+      color: var(--ink-soft);
+      font-family: var(--font-sans);
+      font-weight: normal;
+    }
+
+    .panel-body {
+      padding: 16px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       4. STAT STRIP (4-column grid, paper-card background)
+    ═══════════════════════════════════════════════════════════════════ */
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background-color: var(--paper-card);
+      border: 1px solid var(--hairline);
+      border-radius: 2px;
+    }
+
+    .stat-item {
+      padding: 14px 18px;
+      border-right: 1px solid var(--hairline);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .stat-item:last-child {
+      border-right: none;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 4px;
+    }
+
+    .stat-value-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .stat-value {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+
+    .stat-value.highlight-red {
+      color: var(--red);
+    }
+
+    .stat-caption {
+      font-size: 11px;
+      color: var(--ink-soft);
+      margin-top: 3px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       5. REPORT CLASSIFIER CONSOLE (Full-width panel)
+    ═══════════════════════════════════════════════════════════════════ */
+    .classifier-textarea {
+      width: 100%;
+      height: 95px;
+      background: #ffffff;
+      border: 1px solid var(--hairline);
+      border-radius: 2px;
+      padding: 10px 12px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--ink);
+      line-height: 1.5;
+      resize: vertical;
+    }
+    .classifier-textarea:focus {
+      outline: none;
+      border-color: var(--navy-800);
+      background-color: #fffefb;
+    }
+
+    .classifier-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-primary {
+      background-color: var(--navy-900);
+      color: #ffffff;
+      border: 1px solid var(--navy-950);
+      border-radius: 2px;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover {
+      background-color: var(--navy-800);
+    }
+
+    .btn-ghost {
+      background-color: transparent;
+      color: var(--ink);
+      border: 1px solid var(--hairline);
+      border-radius: 2px;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 7px 14px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-ghost:hover {
+      background-color: #ede9dc;
+      border-color: #beb7a2;
+    }
+
+    .sample-indicator-text {
+      font-size: 11px;
+      color: var(--ink-soft);
+      margin-left: auto;
+    }
+
+    /* Result Box */
+    .result-box {
+      margin-top: 14px;
+      padding: 14px;
+      background-color: #ffffff;
+      border: 1px solid var(--hairline);
+      border-radius: 2px;
+      display: none; /* hidden until first run */
+    }
+
+    .result-top-grid {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid #ede9dc;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+
+    /* Circular Score Ring */
+    .score-circle-badge {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid var(--hairline);
+      flex-shrink: 0;
+      background: #faf8f5;
+    }
+    .score-circle-badge.red {
+      border-color: var(--red);
+      color: var(--red);
+      background: #fff5f5;
+    }
+    .score-circle-badge.amber {
+      border-color: var(--amber);
+      color: var(--amber);
+      background: #fffdf5;
+    }
+    .score-circle-badge.green {
+      border-color: var(--green);
+      color: var(--green);
+      background: #f4faf6;
+    }
+    .score-val {
+      font-family: var(--font-mono);
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .score-out-of {
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .verdict-info {
+      flex: 1;
+    }
+
+    .verdict-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      padding: 2px 8px;
+      border-radius: 2px;
+      margin-bottom: 4px;
+    }
+    .verdict-badge.red {
+      background-color: #fce8e6;
+      color: var(--red);
+      border: 1px solid #f5b5b0;
+    }
+    .verdict-badge.green {
+      background-color: #eaf5ee;
+      color: var(--green);
+      border: 1px solid #bce2ca;
+    }
+
+    .verdict-summary {
+      font-size: 12px;
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    /* Matched Rules and Precursor Factors */
+    .result-details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .result-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 6px;
+    }
+
+    .rule-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .rule-chip {
+      background-color: #f1ede1;
+      border: 1px solid #ded8c7;
+      color: var(--ink);
+      padding: 2px 8px;
+      font-size: 11px;
+      border-radius: 2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 500;
+    }
+    .rule-chip-tag {
+      font-size: 9px;
+      padding: 1px 4px;
+      background: var(--navy-800);
+      color: #ffffff;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+
+    .factor-bullets {
+      list-style: none;
+      font-size: 12px;
+      color: var(--ink);
+    }
+    .factor-bullets li {
+      padding: 2px 0;
+      position: relative;
+      padding-left: 14px;
+    }
+    .factor-bullets li::before {
+      content: "▪";
+      position: absolute;
+      left: 0;
+      color: var(--saffron-deep);
+      font-size: 10px;
+      top: 1px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       6. TWO-COLUMN CHART ROW
+    ═══════════════════════════════════════════════════════════════════ */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 16px;
+    }
+
+    .chart-container-box {
+      height: 230px;
+      position: relative;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       7. SITE & ACTIVITY RISK RANKING TABLE (Full-width)
+    ═══════════════════════════════════════════════════════════════════ */
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    .institutional-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      text-align: left;
+    }
+
+    .institutional-table th {
+      background-color: #f3efe6;
+      color: var(--ink-soft);
+      font-family: var(--font-sans);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      padding: 8px 12px;
+      border-bottom: 2px solid var(--hairline);
+      font-size: 11px;
+    }
+
+    .institutional-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid #e8e3d5;
+      color: var(--ink);
+    }
+
+    .institutional-table tr:hover {
+      background-color: #f5f2e8;
+    }
+
+    .rank-cell {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--ink-soft);
+      width: 38px;
+    }
+
+    .site-name-cell {
+      font-weight: 600;
+      color: var(--navy-900);
+    }
+
+    .density-bar-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .density-track {
+      flex: 1;
+      height: 7px;
+      background-color: #e5dfd0;
+      border-radius: 1px;
+      overflow: hidden;
+      max-width: 90px;
+    }
+
+    .density-fill {
+      height: 100%;
+      background-color: var(--saffron);
+    }
+    .density-fill.high {
+      background-color: var(--red);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       8. RECENTLY FLAGGED — HIGH SIF SCORE FEED
+    ═══════════════════════════════════════════════════════════════════ */
+    .flagged-feed-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .flagged-feed-item {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--hairline);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background-color: #ffffff;
+    }
+    .flagged-feed-item:last-child {
+      border-bottom: none;
+    }
+
+    .flag-score-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .flag-score-dot.red   { background-color: var(--red); }
+    .flag-score-dot.amber { background-color: var(--amber); }
+    .flag-score-dot.green { background-color: var(--green); }
+
+    .flag-item-content {
+      flex: 1;
+    }
+
+    .flag-item-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      margin-bottom: 2px;
+    }
+
+    .flag-item-site {
+      font-weight: 600;
+      color: var(--navy-900);
+    }
+
+    .flag-item-time {
+      color: var(--ink-soft);
+    }
+
+    .flag-item-text {
+      font-size: 12px;
+      color: var(--ink);
+      line-height: 1.4;
+      margin-bottom: 5px;
+    }
+
+    .flag-item-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .flag-item-tag {
+      font-size: 10px;
+      padding: 1px 6px;
+      background-color: #f1ede1;
+      border: 1px solid #dfd8c5;
+      border-radius: 2px;
+      color: var(--ink);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       9. FOOTER (navy-950)
+    ═══════════════════════════════════════════════════════════════════ */
+    .site-footer {
+      margin-top: 30px;
+      background-color: var(--navy-950);
+      color: #94a3b8;
+      font-size: 11px;
+      padding: 20px 24px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      text-align: center;
+      line-height: 1.6;
+    }
+    .site-footer p:first-child {
+      color: #e2e8f0;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       RESPONSIVE BREAKPOINTS (Down to ~880px)
+    ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 920px) {
+      .charts-row {
+        grid-template-columns: 1fr;
+      }
+      .stat-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .stat-item:nth-child(2) {
+        border-right: none;
+      }
+      .stat-item:nth-child(1), .stat-item:nth-child(2) {
+        border-bottom: 1px solid var(--hairline);
+      }
+      .result-details-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     1. GOVERNMENT STRIP (top, ~30px tall, navy-950)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="gov-strip">
+    <div class="gov-strip-left">
+      <div class="tricolor-box" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+      <span class="gov-strip-text">Ministry of Petroleum &amp; Natural Gas, Government of India — Public Sector Undertaking</span>
+    </div>
+    <div class="gov-strip-right">
+      <a href="javascript:void(0)" onclick="alert('हिन्दी संस्करण जल्द उपलब्ध होगा।')">हिन्दी</a>
+      <span class="gov-strip-sep">|</span>
+      <a href="javascript:void(0)" onclick="alert('GIGW Standard Compliance: Conforms to Level AA of W3C Web Content Accessibility Guidelines (WCAG) 2.1')">Accessibility</a>
+      <span class="gov-strip-sep">|</span>
+      <a href="javascript:void(0)" onclick="alert('Screen reader assistance enabled.')">Screen Reader</a>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     2. MAIN HEADER (navy-900, 3px saffron bottom border)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <header class="main-header">
+    <div class="header-left">
+      <!-- Abstract Circular PSU Seal (Avoids restricted state emblem) -->
+      <div class="psu-seal" aria-hidden="true">
+        <div class="psu-seal-inner">OIL</div>
+        <div class="psu-seal-sub">HSE</div>
+      </div>
+      <div class="header-titles">
+        <div class="header-dept-label">OIL INDIA LIMITED · HSSE DIRECTORATE</div>
+        <h1 class="header-system-title">SPIS — SIF Precursor Intelligence System</h1>
+        <div class="header-subtitle">AI/NLP surveillance of UA/UC, near-miss &amp; incident reports for fatal-potential precursors</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-period">Prototype build · Reporting period FY 2026–27</div>
+      <div class="restricted-badge">Restricted — Internal HSE Use</div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     3. TAB NAVIGATION BAR (navy-800)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <nav class="tab-navbar" aria-label="Primary Portal Tabs">
+    <div class="nav-tabs" role="tablist">
+      <button class="nav-tab-item active" role="tab" aria-selected="true" onclick="switchNavTab(this, 'overview')">Overview</button>
+      <button class="nav-tab-item" role="tab" aria-selected="false" onclick="switchNavTab(this, 'classifier')">Classifier Console</button>
+      <button class="nav-tab-item" role="tab" aria-selected="false" onclick="switchNavTab(this, 'sites')">Site Risk Ranking</button>
+      <button class="nav-tab-item" role="tab" aria-selected="false" onclick="switchNavTab(this, 'rules')">Life-Saving Rules</button>
+      <button class="nav-tab-item" role="tab" aria-selected="false" onclick="switchNavTab(this, 'flagged')">Flagged Reports</button>
+    </div>
+    <div class="nav-live-status">
+      <span class="status-dot active" id="liveDot"></span>
+      <span id="backendStatusLabel">Engine: Standalone (Bundled Data)</span>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     MAIN CONTENT WRAPPER
+  ═══════════════════════════════════════════════════════════════════ -->
+  <main class="main-container" id="mainContainer">
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+       4. STAT STRIP (4-column grid, paper-card background)
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section class="stat-strip" aria-label="Key Performance Indicators">
+      <div class="stat-item">
+        <div class="stat-label">Reports Screened (90d)</div>
+        <div class="stat-value-row">
+          <span class="stat-value" id="kpiReportsScreened">3,000</span>
+        </div>
+        <div class="stat-caption">Across 11 field installations</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Flagged SIF-Potential</div>
+        <div class="stat-value-row">
+          <span class="stat-value highlight-red" id="kpiSifCount">690</span>
+        </div>
+        <div class="stat-caption" id="kpiSifRatio">23.0% of volume (benchmark 20–25%)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Top Precursor Rule</div>
+        <div class="stat-value-row">
+          <span class="stat-value" id="kpiTopRule" style="font-size:22px;">Energy Isolation</span>
+        </div>
+        <div class="stat-caption" id="kpiTopRulePct">27.4% of SIF-tagged reports</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Sites Above Threshold</div>
+        <div class="stat-value-row">
+          <span class="stat-value" id="kpiAboveThreshold">3 sites</span>
+        </div>
+        <div class="stat-caption">Duliajan, Moran, Barekuri (density &gt; 25%)</div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+       5. REPORT CLASSIFIER CONSOLE (Full-width panel)
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section class="panel-box" id="classifierSection">
+      <div class="panel-header">
+        <h2 class="panel-title"><span>🔬</span> Report Classifier Console</h2>
+        <span class="panel-header-sub">OISD-GDN-166 &amp; DGMS Statutory High-Energy Precursor Triage</span>
+      </div>
+      <div class="panel-body">
+        <label for="reportInput" style="display:none;">Safety Incident Report Text</label>
+        <textarea id="reportInput" class="classifier-textarea" placeholder="Enter safety observation, incident narrative, or near-miss text to evaluate fatal precursor potential..."></textarea>
+
+        <div class="classifier-controls">
+          <button type="button" class="btn-primary" id="runClassificationBtn" onclick="runClassification()">
+            Run Classification
+          </button>
+          <button type="button" class="btn-ghost" onclick="cycleSample()">
+            Load another sample
+          </button>
+          <span class="sample-indicator-text" id="sampleNotice">Pre-filled with Sample 1 of 8</span>
+        </div>
+
+        <!-- Result Box (Initially hidden) -->
+        <div class="result-box" id="resultContainer">
+          <div class="result-top-grid">
+            <div class="score-circle-badge red" id="scoreCircle">
+              <span class="score-val" id="scoreValue">78</span>
+              <span class="score-out-of">/ 100</span>
+            </div>
+            <div class="verdict-info">
+              <span class="verdict-badge red" id="verdictBadge">SIF-POTENTIAL</span>
+              <div class="verdict-summary" id="verdictSummary">
+                High-energy hazardous exposure identified without verified primary protective barrier.
+              </div>
+            </div>
+          </div>
+
+          <div class="result-details-grid">
+            <div>
+              <div class="result-section-label">Matched IOGP Life-Saving Rules</div>
+              <div class="rule-chips" id="matchedRulesChips">
+                <!-- Chips inserted here -->
+              </div>
+            </div>
+            <div>
+              <div class="result-section-label">Precursor Factors Identified</div>
+              <ul class="factor-bullets" id="precursorFactorsList">
+                <!-- Factors inserted here -->
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+       6. TWO-COLUMN CHART ROW
+    ═══════════════════════════════════════════════════════════════════ -->
+    <div class="charts-row" id="chartsSection">
+      <!-- Left (Wider): Horizontal Bar Chart -->
+      <section class="panel-box">
+        <div class="panel-header">
+          <h2 class="panel-title"><span>📊</span> SIF Density by Life-Saving Rule</h2>
+          <span class="panel-header-sub">9 IOGP Rules ranked by precursor incidence</span>
+        </div>
+        <div class="panel-body">
+          <div class="chart-container-box">
+            <canvas id="lsrDensityChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Line Chart -->
+      <section class="panel-box">
+        <div class="panel-header">
+          <h2 class="panel-title"><span>📈</span> Weekly Precursor Trend</h2>
+          <span class="panel-header-sub">12-week triage progression</span>
+        </div>
+        <div class="panel-body">
+          <div class="chart-container-box">
+            <canvas id="weeklyTrendChart"></canvas>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+       7. SITE & ACTIVITY RISK RANKING (Full-width table)
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section class="panel-box" id="sitesSection">
+      <div class="panel-header">
+        <h2 class="panel-title"><span>🏢</span> Site &amp; Activity Risk Ranking</h2>
+        <span class="panel-header-sub">Ranked strictly by SIF Density (SIF-Potential / Total Screened), not raw volume</span>
+      </div>
+      <div class="panel-body" style="padding:0;">
+        <div class="table-wrapper">
+          <table class="institutional-table">
+            <thead>
+              <tr>
+                <th class="rank-cell">#</th>
+                <th>Site / Installation</th>
+                <th>Primary Activity</th>
+                <th style="text-align:right;">Reports (90d)</th>
+                <th style="text-align:right;">SIF-Potential</th>
+                <th style="min-width:140px;">SIF Density</th>
+                <th>Leading Rule</th>
+              </tr>
+            </thead>
+            <tbody id="siteRiskTableBody">
+              <!-- Rendered via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+       8. RECENTLY FLAGGED — HIGH SIF SCORE (Feed/list panel)
+    ═══════════════════════════════════════════════════════════════════ -->
+    <section class="panel-box" id="flaggedSection">
+      <div class="panel-header">
+        <h2 class="panel-title"><span>🚨</span> Recently Flagged — High SIF Score</h2>
+        <span class="panel-header-sub">Real-time surveillance alerts sorted descending by risk severity</span>
+      </div>
+      <div class="panel-body" style="padding:0;">
+        <div class="flagged-feed-list" id="flaggedReportsFeed">
+          <!-- Rendered via JavaScript -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     9. FOOTER (navy-950)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <p>© Oil India Limited — HSSE Directorate. Prototype system for demonstration purposes.</p>
+    <p>Methodology aligned to IOGP Life-Saving Rules · DEKRA SIF Precursor Framework · EEI Serious Injury &amp; Fatality Model</p>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     INLINE APPLICATION LOGIC (Standalone + Optional FastAPI Connection)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <script>
+    'use strict';
+
+    // ── API Configuration ─────────────────────────────────────────────
+    const API_BASE = "http://localhost:8000";
+    let _apiLive = false;
+
+    // ── 6+ Realistic Built-In Sample Reports (SIF & Non-SIF Mix) ──────
+    const SAMPLE_REPORTS = [
+      {
+        id: "SAMPLE-01",
+        type: "SIF",
+        text: "Contractor electrician was troubleshooting an energized 415V MCC motor control panel at Duliajan Field without LOTO padlock, tagout, or verified electrical isolation. Worker came within 10 cm of live busbar."
+      },
+      {
+        id: "SAMPLE-02",
+        type: "SIF",
+        text: "Welding contractor commenced cutting and hot work on crude oil transfer line at Moran GGS without hot work permit or gas test. Spark shower observed falling directly near flammable hydrocarbon line."
+      },
+      {
+        id: "SAMPLE-03",
+        type: "SIF",
+        text: "Operator entered storage crude oil tank at Jorhat for internal visual inspection without atmospheric testing for H2S/LEL and without standby buddy person or SCBA at manhole."
+      },
+      {
+        id: "SAMPLE-04",
+        type: "SIF",
+        text: "15-ton mobile crane at Naharkatiya workshop exceeded Safe Working Load during pipe bundle lifting operation. Rigging sling showed severed wire strands; tagline missing and workers in drop zone."
+      },
+      {
+        id: "SAMPLE-05",
+        type: "SIF",
+        text: "Rig crew member working on derrick mast at 14m elevation at Barekuri well pad without safety harness connected to inertia reel anchor point. Heavy monkey wrench dropped to drill floor below."
+      },
+      {
+        id: "SAMPLE-06",
+        type: "SIF",
+        text: "Drilling crew on Rajasthan RJ-12 well pad bypassed the safety interlock switch on the blow-out preventer (BOP) hydraulic control accumulator to speed up tripping operations during high formation pressure."
+      },
+      {
+        id: "SAMPLE-07",
+        type: "NON-SIF",
+        text: "Minor grease accumulation noted around tool bench area at Lakwa workshop. Cleaned with degreaser; absorbent pads placed in drip tray per standard housekeeping routine."
+      },
+      {
+        id: "SAMPLE-08",
+        type: "NON-SIF",
+        text: "Visitor walked across administration vehicle parking lot at Duliajan field base without wearing high-visibility vest. Reminded by security officer and complied immediately."
+      }
+    ];
+
+    let currentSampleIndex = 0;
+
+    // ── Realistic Hardcoded SITES Dataset (Assam & Rajasthan Operations) ──
+    // Explicitly ranked descending by SIF Density (SIF / Reports), NOT volume
+    const SITES = [
+      { rank: 1, site: "Duliajan Hub", activity: "Crude Gathering & Gas Processing", reports: 412, sif: 128, density: 0.3107, rule: "Energy Isolation" },
+      { rank: 2, site: "Moran GGS", activity: "Pipeline & Line Breaking", reports: 385, sif: 116, density: 0.3013, rule: "Hot Work" },
+      { rank: 3, site: "Barekuri Wellhead", activity: "Workover & Well Servicing", reports: 298, sif: 84, density: 0.2819, rule: "Working at Height" },
+      { rank: 4, site: "Kumchai Rig 04", activity: "High-Pressure Deep Drilling", reports: 254, sif: 68, density: 0.2677, rule: "Line of Fire" },
+      { rank: 5, site: "Jorajan Complex", activity: "Heavy Tank Farm Storage", reports: 280, sif: 72, density: 0.2571, rule: "Confined Space" },
+      { rank: 6, site: "Naharkatiya Base", activity: "Mechanical Rigging & Overhaul", reports: 320, sif: 79, density: 0.2469, rule: "Safe Mechanical Lifting" },
+      { rank: 7, site: "Lakwa Production", activity: "Compressor Operations", reports: 265, sif: 58, density: 0.2189, rule: "Bypassing Safety Controls" },
+      { rank: 8, site: "Digboi Refinery Area", activity: "Civil Infrastructure & Trenching", reports: 340, sif: 62, density: 0.1824, rule: "Work Authorisation" },
+      { rank: 9, site: "Baghewala Heavy Oil", activity: "Thermal EOR Injection", reports: 175, sif: 31, density: 0.1771, rule: "Energy Isolation" },
+      { rank: 10, site: "Jaisalmer Gas Block", activity: "Remote Desert Haulage", reports: 160, sif: 26, density: 0.1625, rule: "Driving" },
+      { rank: 11, site: "Barmer Field Terminal", activity: "Logistics & Tanker Despatch", reports: 111, sif: 16, density: 0.1441, rule: "Driving" }
+    ];
+
+    // ── Hardcoded Flagged Feed (High SIF Score, Sorted Descending) ───
+    const FLAGS = [
+      {
+        id: "OIL-SIF-2026-094",
+        score: 96,
+        site: "Rajasthan RJ-12",
+        time: "1 day ago",
+        rule: "Bypassing Safety Controls",
+        text: "Drilling crew bypassed BOP accumulator pressure interlock during well tripping with reservoir pressure above formation gradient."
+      },
+      {
+        id: "OIL-SIF-2026-088",
+        score: 92,
+        site: "Moran GGS",
+        time: "2 days ago",
+        rule: "Hot Work",
+        text: "Welding torch ignited near condensate transfer line without valid PTW, LEL gas test, or standby fire watch."
+      },
+      {
+        id: "OIL-SIF-2026-081",
+        score: 89,
+        site: "Jorhat Storage",
+        time: "4 days ago",
+        rule: "Confined Space",
+        text: "Two contractor technicians entered crude storage tank without continuous O2/H2S atmospheric monitoring or rescue retrieval harness."
+      },
+      {
+        id: "OIL-SIF-2026-075",
+        score: 86,
+        site: "Duliajan Hub",
+        time: "5 days ago",
+        rule: "Energy Isolation",
+        text: "Contractor opened high-voltage motor control panel without verified zero-energy state verification or padlocked LOTO tagout."
+      },
+      {
+        id: "OIL-SIF-2026-069",
+        score: 82,
+        site: "Naharkatiya Base",
+        time: "1 week ago",
+        rule: "Safe Mechanical Lifting",
+        text: "Overhead crane wire rope snapped under 14-ton pipe bundle shock load; tagline missing and workers in exclusion drop zone."
+      },
+      {
+        id: "OIL-SIF-2026-054",
+        score: 74,
+        site: "Barekuri Wellhead",
+        time: "1 week ago",
+        rule: "Working at Height",
+        text: "Worker standing on elevated unbolted scaffolding plank at 9m height without fall arrest lanyard attached to certified anchor."
+      }
+    ];
+
+    // ── 9 IOGP Life-Saving Rules Taxonomy Keywords ────────────────────
+    const IOGP_LSR_KEYWORDS = {
+      "Energy Isolation": ["energized", "loto", "lockout", "tagout", "isolation", "de-energized", "live busbar", "switchgear", "panel", "415v", "11kv", "electric shock", "zero energy"],
+      "Hot Work": ["hot work", "welding", "cutting", "sparks", "torch", "open flame", "grinding", "flammable", "gas test", "hydrocarbon"],
+      "Confined Space": ["confined space", "tank entry", "vessel entry", "manhole", "sewer", "oxygen", "h2s", "atmospheric test", "scba", "standby person", "attendant"],
+      "Working at Height": ["height", "scaffold", "scaffolding", "ladder", "fall arrest", "harness", "lanyard", "anchor point", "derrick", "mast", "dropped object", "elevated"],
+      "Line of Fire": ["line of fire", "struck by", "pinch point", "dropped object", "rotating equipment", "pressure release", "drop zone", "swinging load"],
+      "Safe Mechanical Lifting": ["crane", "lifting", "rigging", "sling", "shackle", "swl", "overload", "tagline", "hoist", "lift supervisor", "load swing"],
+      "Bypassing Safety Controls": ["bypass", "bypassed", "defeated", "interlock", "overridden", "safety device removed", "alarm disabled", "gagged valve"],
+      "Work Authorisation": ["permit to work", "ptw", "work permit", "unauthorized work", "permit expired", "no permit", "toolbox talk", "tbt", "jsa"],
+      "Driving": ["driving", "vehicle", "driver", "seatbelt", "speeding", "rollover", "journey plan", "fatigue driving", "banksman"]
+    };
+
+    // ── Standalone Fallback Keyword Classifier ────────────────────────
+    function scoreReport(text) {
+      const tl = text.toLowerCase();
+      let matchedRules = [];
+      let factors = [];
+      let score = 15;
+
+      for (const [rule, kws] of Object.entries(IOGP_LSR_KEYWORDS)) {
+        let hits = kws.filter(kw => tl.includes(kw));
+        if (hits.length > 0) {
+          matchedRules.push(rule);
+          if (rule === "Energy Isolation") {
+            score += 65;
+            factors.push("Electrical or mechanical energy source not isolated or verified.");
+          } else if (rule === "Hot Work") {
+            score += 60;
+            factors.push("Ignition source introduced in presence of potential flammable hydrocarbons.");
+          } else if (rule === "Confined Space") {
+            score += 62;
+            factors.push("Entry into hazardous enclosure without verified atmospheric gas monitoring.");
+          } else if (rule === "Working at Height") {
+            score += 55;
+            factors.push("Fall hazard from elevation without certified personal fall arrest system.");
+          } else if (rule === "Safe Mechanical Lifting") {
+            score += 54;
+            factors.push("Suspended load rigging or equipment failure with workers in drop zone.");
+          } else if (rule === "Bypassing Safety Controls") {
+            score += 68;
+            factors.push("Critical engineering safeguard or safety interlock intentionally defeated.");
+          } else if (rule === "Line of Fire") {
+            score += 45;
+            factors.push("Personnel positioning within trajectory of uncontrolled energy or moving object.");
+          } else if (rule === "Work Authorisation") {
+            score += 35;
+            factors.push("Task undertaken without mandatory statutory permit or risk evaluation.");
+          } else if (rule === "Driving") {
+            score += 40;
+            factors.push("Vehicle operation non-compliance or lack of route journey risk control.");
+          }
+        }
+      }
+
+      score = Math.min(97, score);
+      const isSif = score >= 50;
+
+      if (!matchedRules.length) {
+        matchedRules = ["Unclassified / Routine"];
+        factors.push("Observation text reflects low-energy routine operation without severe hazard exposure.");
+      }
+
+      return {
+        sif_potential: isSif,
+        sif_score: score,
+        life_saving_rules: matchedRules,
+        precursor_factors: factors,
+        explanation: isSif 
+          ? "High-energy hazardous exposure identified with potential for life-altering injury or fatality."
+          : "Routine operation or low-severity observation; no high-energy SIF precursor identified."
+      };
+    }
+
+    // ── Execute Classification (Live API with Seamless Mock Fallback) ──
+    async function runClassification() {
+      const inputEl = document.getElementById("reportInput");
+      const text = inputEl.value.trim();
+      if (!text) {
+        alert("Please enter or select a report text to classify.");
+        return;
+      }
+
+      const btn = document.getElementById("runClassificationBtn");
+      btn.disabled = true;
+      btn.textContent = "Analyzing...";
+
+      if (_apiLive) {
+        try {
+          const res = await fetch(`${API_BASE}/classify`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            renderResults({
+              sif_potential: data.sif_potential,
+              sif_score: data.sif_score,
+              life_saving_rules: data.life_saving_rules || [],
+              precursor_factors: data.precursor_factors || [],
+              explanation: data.sif_potential 
+                ? "Live Model Probability: High-energy fatal precursor identified." 
+                : "Live Model Probability: Observation classified as Low Risk / Routine.",
+              tag_source: data.tag_source || {}
+            });
+            btn.disabled = false;
+            btn.textContent = "Run Classification";
+            return;
+          }
+        } catch (err) {
+          console.warn("[API] Live classify failed, using standalone fallback:", err);
+        }
+      }
+
+      // Standalone Fallback Execution
+      setTimeout(() => {
+        const result = scoreReport(text);
+        renderResults(result);
+        btn.disabled = false;
+        btn.textContent = "Run Classification";
+      }, 150);
+    }
+
+    // ── Render Classification Results ─────────────────────────────────
+    function renderResults(res) {
+      const container = document.getElementById("resultContainer");
+      container.style.display = "block";
+
+      const score = res.sif_score;
+      const circle = document.getElementById("scoreCircle");
+      const scoreVal = document.getElementById("scoreValue");
+      const badge = document.getElementById("verdictBadge");
+      const summary = document.getElementById("verdictSummary");
+
+      scoreVal.textContent = score;
+
+      // Color ring logic: red if >=65, amber if 35-64, green if <35
+      if (score >= 65) {
+        circle.className = "score-circle-badge red";
+        badge.className = "verdict-badge red";
+        badge.textContent = "SIF-POTENTIAL";
+      } else if (score >= 35) {
+        circle.className = "score-circle-badge amber";
+        badge.className = "verdict-badge amber";
+        badge.textContent = "MEDIUM RISK";
+      } else {
+        circle.className = "score-circle-badge green";
+        badge.className = "verdict-badge green";
+        badge.textContent = "NON-SIF-POTENTIAL";
+      }
+
+      summary.textContent = res.explanation || (score >= 50 
+        ? "High-energy hazardous exposure identified with potential for life-altering injury or fatality."
+        : "Routine low-severity hazard; no high-energy fatal precursor identified.");
+
+      // Render Life-Saving Rules
+      const chipsEl = document.getElementById("matchedRulesChips");
+      chipsEl.innerHTML = (res.life_saving_rules || []).map(r => {
+        const src = res.tag_source && res.tag_source[r] ? res.tag_source[r] : "IOGP";
+        return `<span class="rule-chip"><span class="rule-chip-tag">${src}</span> ${r}</span>`;
+      }).join("");
+
+      // Render Precursor Factors
+      const factorsEl = document.getElementById("precursorFactorsList");
+      factorsEl.innerHTML = (res.precursor_factors || []).map(f => `<li>${f}</li>`).join("");
+
+      // Scroll into view if needed
+      container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // ── Cycle Built-In Samples ────────────────────────────────────────
+    function cycleSample() {
+      currentSampleIndex = (currentSampleIndex + 1) % SAMPLE_REPORTS.length;
+      const sample = SAMPLE_REPORTS[currentSampleIndex];
+      document.getElementById("reportInput").value = sample.text;
+      document.getElementById("sampleNotice").textContent = `Loaded Sample ${currentSampleIndex + 1} of ${SAMPLE_REPORTS.length} (${sample.type})`;
+      // Clear result box on sample switch
+      document.getElementById("resultContainer").style.display = "none";
+    }
+
+    // ── Render Site Risk Ranking Table ────────────────────────────────
+    function renderSiteTable(sites) {
+      const tbody = document.getElementById("siteRiskTableBody");
+      tbody.innerHTML = sites.map((s, idx) => {
+        const pct = (s.density * 100).toFixed(1);
+        const isHigh = s.density >= 0.25;
+        return `
+          <tr>
+            <td class="rank-cell">${idx + 1}</td>
+            <td class="site-name-cell">${s.site}</td>
+            <td>${s.activity || "Hydrocarbon Production Operations"}</td>
+            <td style="text-align:right;" class="mono">${s.reports || s.report_count}</td>
+            <td style="text-align:right;font-weight:600;color:var(--red);" class="mono">${s.sif || s.sif_count}</td>
+            <td>
+              <div class="density-bar-container">
+                <div class="density-track">
+                  <div class="density-fill ${isHigh ? 'high' : ''}" style="width: ${Math.min(100, s.density * 300)}%;"></div>
+                </div>
+                <span class="mono" style="font-weight:600;font-size:11px;">${pct}%</span>
+              </div>
+            </td>
+            <td><strong>${s.rule || s.top_life_saving_rule || "Energy Isolation"}</strong></td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    // ── Render Flagged Feed ───────────────────────────────────────────
+    function renderFlaggedFeed(feed) {
+      const container = document.getElementById("flaggedReportsFeed");
+      container.innerHTML = feed.map(item => {
+        const score = item.score || item.ground_truth_sif_score || 85;
+        const colorClass = score >= 65 ? "red" : score >= 35 ? "amber" : "green";
+        const rule = item.rule || item.life_saving_rule || "Energy Isolation";
+        return `
+          <div class="flagged-feed-item">
+            <div class="flag-score-dot ${colorClass}">
+              ${score}
+            </div>
+            <div class="flag-item-content">
+              <div class="flag-item-header">
+                <span class="flag-item-site">${item.site} · <span class="mono">${item.id || item.report_id}</span></span>
+                <span class="flag-item-time">${item.time || item.date || "Recent"}</span>
+              </div>
+              <div class="flag-item-text">${item.text || item.report_text}</div>
+              <div class="flag-item-tags">
+                <span class="flag-item-tag">🛡️ ${rule}</span>
+                <span class="flag-item-tag" style="color:var(--red);font-weight:600;">SIF Critical</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // ── Chart.js Setup (LSR Density & Weekly Precursor Trend) ─────────
+    let chartLsr = null;
+    let chartTrend = null;
+
+    function initCharts() {
+      // 1. Horizontal Bar Chart: SIF Density by Life-Saving Rule
+      const ctxLsr = document.getElementById("lsrDensityChart").getContext("2d");
+      chartLsr = new Chart(ctxLsr, {
+        type: "bar",
+        data: {
+          labels: [
+            "Energy Isolation",
+            "Hot Work",
+            "Line of Fire",
+            "Confined Space",
+            "Working at Height",
+            "Safe Mechanical Lifting",
+            "Driving",
+            "Bypassing Safety Controls",
+            "Work Authorisation"
+          ],
+          datasets: [{
+            label: "Precursor Incidence",
+            data: [189, 134, 118, 72, 59, 46, 38, 22, 12],
+            backgroundColor: "#c96a1f", // Saffron
+            borderRadius: 2,
+            barThickness: 12
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: "y",
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${ctx.raw} flagged reports`
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: "#ded8c7" },
+              ticks: { font: { family: "Inter", size: 10 }, color: "#4a5a68" }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { font: { family: "Inter", size: 11, weight: "500" }, color: "#16232e" }
+            }
+          }
+        }
+      });
+
+      // 2. Line Chart: Weekly Precursor Trend (12 Weeks)
+      const ctxTrend = document.getElementById("weeklyTrendChart").getContext("2d");
+      chartTrend = new Chart(ctxTrend, {
+        type: "line",
+        data: {
+          labels: ["W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10", "W11", "W12"],
+          datasets: [
+            {
+              label: "SIF-Potential",
+              data: [38, 42, 45, 50, 48, 54, 58, 62, 65, 68, 72, 76],
+              borderColor: "#a3312a", // Red
+              backgroundColor: "rgba(163, 49, 42, 0.08)",
+              fill: true,
+              tension: 0.3,
+              borderWidth: 2,
+              pointRadius: 2.5
+            },
+            {
+              label: "Non-SIF",
+              data: [210, 204, 198, 190, 195, 188, 182, 178, 175, 170, 168, 164],
+              borderColor: "#123657", // Navy
+              backgroundColor: "transparent",
+              borderDash: [3, 3],
+              tension: 0.3,
+              borderWidth: 1.5,
+              pointRadius: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: "top",
+              align: "end",
+              labels: {
+                boxWidth: 10,
+                font: { family: "Inter", size: 10 },
+                color: "#4a5a68"
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { font: { family: "Inter", size: 10 }, color: "#4a5a68" }
+            },
+            y: {
+              grid: { color: "#ded8c7" },
+              ticks: { font: { family: "Inter", size: 10 }, color: "#4a5a68" }
+            }
+          }
+        }
+      });
+    }
+
+    // ── Tab Switching Navigation ──────────────────────────────────────
+    function switchNavTab(button, tabKey) {
+      document.querySelectorAll(".nav-tab-item").forEach(b => b.classList.remove("active"));
+      button.classList.add("active");
+
+      const mapping = {
+        "overview": "classifierSection",
+        "classifier": "classifierSection",
+        "sites": "sitesSection",
+        "rules": "chartsSection",
+        "flagged": "flaggedSection"
+      };
+
+      const targetId = mapping[tabKey];
+      if (targetId) {
+        const el = document.getElementById(targetId);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    // ── Backend Probing (Live Detection with Zero Error State) ─────────
+    async function checkBackend() {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 1500);
+        const res = await fetch(`${API_BASE}/health`, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.status === "ok") {
+            _apiLive = true;
+            document.getElementById("backendStatusLabel").textContent = "Engine: Live FastAPI (Port 8000)";
+            document.getElementById("liveDot").style.backgroundColor = "#22c55e";
+            // Hydrate live sites & flagged if endpoint succeeds
+            hydrateLiveEndpoints();
+          }
+        }
+      } catch (_) {
+        // Backend not running — silently use mock data
+        document.getElementById("backendStatusLabel").textContent = "Engine: Standalone (Bundled Data)";
+      }
+    }
+
+    async function hydrateLiveEndpoints() {
+      try {
+        const rSites = await fetch(`${API_BASE}/sites`);
+        if (rSites.ok) {
+          const dSites = await rSites.json();
+          const sites = dSites.sites || [];
+          if (sites.length) {
+            renderSiteTable(sites);
+
+            // Compute live aggregate stats
+            const totalRecs = dSites.total_records || dSites.total_reports || 3000;
+            const sifRecs = sites.reduce((sum, s) => sum + (s.sif_count || 0), 0);
+            const ratio = ((sifRecs / totalRecs) * 100).toFixed(1);
+
+            // Life saving rules aggregation
+            const lsrCounts = {};
+            sites.forEach(s => {
+              if (s.top_life_saving_rule) {
+                lsrCounts[s.top_life_saving_rule] = (lsrCounts[s.top_life_saving_rule] || 0) + (s.sif_count || 1);
+              }
+            });
+            const sortedLsr = Object.entries(lsrCounts).sort((a, b) => b[1] - a[1]);
+            const topLsr = sortedLsr[0] ? sortedLsr[0][0] : "Energy Isolation";
+            const topLsrCount = sortedLsr[0] ? sortedLsr[0][1] : sifRecs;
+            const topLsrPct = ((topLsrCount / (sifRecs || 1)) * 100).toFixed(1);
+            const aboveThreshold = sites.filter(s => (s.density || 0) >= 0.25);
+
+            // Update KPI cards in stat-strip
+            const elScreened = document.getElementById("kpiReportsScreened");
+            const elSif = document.getElementById("kpiSifCount");
+            const elRatio = document.getElementById("kpiSifRatio");
+            const elTopRule = document.getElementById("kpiTopRule");
+            const elTopRulePct = document.getElementById("kpiTopRulePct");
+            const elAboveThresh = document.getElementById("kpiAboveThreshold");
+
+            if (elScreened) elScreened.textContent = totalRecs.toLocaleString();
+            if (elSif) elSif.textContent = sifRecs.toLocaleString();
+            if (elRatio) elRatio.textContent = `${ratio}% of volume (Live Model/Dataset)`;
+            if (elTopRule) elTopRule.textContent = topLsr;
+            if (elTopRulePct) elTopRulePct.textContent = `${topLsrPct}% of SIF-tagged reports`;
+            if (elAboveThresh) elAboveThresh.textContent = `${aboveThreshold.length} sites`;
+
+            // Dynamically refresh LSR chart with live counts
+            if (chartLsr && sortedLsr.length) {
+              chartLsr.data.labels = sortedLsr.map(x => x[0]);
+              chartLsr.data.datasets[0].data = sortedLsr.map(x => x[1]);
+              chartLsr.update();
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("[API] /sites hydration failed:", err);
+      }
+
+      try {
+        const rFlagged = await fetch(`${API_BASE}/reports/flagged?limit=8`);
+        if (rFlagged.ok) {
+          const dFlagged = await rFlagged.json();
+          if (dFlagged.flagged_reports && dFlagged.flagged_reports.length) {
+            renderFlaggedFeed(dFlagged.flagged_reports);
+          }
+        }
+      } catch (err) {
+        console.warn("[API] /reports/flagged hydration failed:", err);
+      }
+    }
+
+    // ── DOM Initialization ────────────────────────────────────────────
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Initialize with pre-filled sample report
+      document.getElementById("reportInput").value = SAMPLE_REPORTS[0].text;
+
+      // 2. Render Mock Tables and Feeds immediately
+      renderSiteTable(SITES);
+      renderFlaggedFeed(FLAGS);
+
+      // 3. Initialize Chart.js visual graphics
+      initCharts();
+
+      // 4. Probe backend (upgrades to live if running, otherwise keeps mock)
+      checkBackend();
+    });
+  </script>
+</body>
+</html>
