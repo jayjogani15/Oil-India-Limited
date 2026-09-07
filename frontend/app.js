@@ -8,8 +8,10 @@
 
 // ── API Configuration & Live/Offline Detection ─────────────────────────────
 // Step 2 backend runs at http://localhost:8000 (uvicorn main:app --reload)
-// The old /api prefix is NO LONGER used — new backend exposes root-level paths.
-const API_BASE = 'http://127.0.0.1:8000';
+// Automatically adapts to hosted domain (Render, Railway, Hugging Face, etc.) or local file
+const API_BASE = (typeof window !== 'undefined' && window.location.protocol.startsWith('http'))
+  ? window.location.origin
+  : 'http://127.0.0.1:8000';
 
 // Single flag: set to true when /health probe succeeds at startup.
 // All subsequent fetch calls branch on this — zero visible error state for user.
